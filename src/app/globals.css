@@ -2,26 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Shabnam";
+  src: url("/fonts/shabnam/Shabnam.woff2") format("woff2"),
+    url("/fonts/shabnam/Shabnam.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Shabnam";
+  src: url("/fonts/shabnam/Shabnam-Bold.woff2") format("woff2"),
+    url("/fonts/shabnam/Shabnam-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Shabnam";
+  src: url("/fonts/shabnam/Shabnam-Light.woff2") format("woff2"),
+    url("/fonts/shabnam/Shabnam-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Sahel";
+  src: url("/fonts/sahel/Sahel.woff2") format("woff2"),
+    url("/fonts/sahel/Sahel.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Sahel";
+  src: url("/fonts/sahel/Sahel-Bold.woff2") format("woff2"),
+    url("/fonts/sahel/Sahel-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.container {
+  @apply px-4;
+}
+
+input::placeholder {
+  @apply font-light;
+  @apply text-silver;
+}
+
+input:focus {
+  @apply outline-none;
+}
+
+html,
+body,
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  height: 100%;
 }
