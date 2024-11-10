@@ -28,7 +28,9 @@ export const signupSchema = z.object({
     .trim(),
   password: z
     .string()
-    .regex(/[a-zA-Z]/, { message: "گذرواژه باید حداقل شامل یک حرف باشد" })
+    .regex(/[a-zA-Z]/, {
+      message: "گذرواژه باید حداقل شامل یک حرف انگلیسی باشد",
+    })
     .regex(/[0-9]/, { message: "گذرواژه باید حداقل شامل یک عدد باشد" })
     .min(8, { message: "گذرواژه باید حداقل شامل هشت حرف باشد" })
     .trim(),
