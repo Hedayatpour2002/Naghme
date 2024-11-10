@@ -4,20 +4,22 @@ import { useState } from "react";
 import { useTransition } from "react";
 import * as z from "zod";
 
-import { LoginSchema } from "@/schemas";
+import { signupSchema } from "@/schemas";
 
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
 import Image from "next/image";
-import { login } from "@/actions/login";
+import { signup } from "@/actions/signup";
 
 type Errors = {
   email?: string;
+  username?: string;
   password?: string;
 };
 
-export default function LoginForm() {
+export default function SignupForm() {
   const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
 
@@ -28,7 +30,7 @@ export default function LoginForm() {
 
   const validateForm = (): boolean => {
     try {
-      LoginSchema.parse({ email, password });
+      signupSchema.parse({ email, username, password });
       setErrors({});
       return true;
     } catch (err: unknown) {
@@ -49,7 +51,7 @@ export default function LoginForm() {
     setActionSuccess("");
     if (validateForm()) {
       startTransition(() => {
-        login({ email, password }).then((data) => {
+        signup({ email, username, password }).then((data) => {
           setActionError(data.error);
           setActionSuccess(data.success);
         });
@@ -59,7 +61,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <p>لطفاً برای ورود به حساب کاربری خود، اطلاعات زیر را وارد کنید.</p>
+      <p>لطفاً برای ثبت نام، اطلاعات زیر را وارد کنید.</p>
 
       <form
         onSubmit={handleSubmit}
@@ -91,6 +93,36 @@ export default function LoginForm() {
                 alt="success icon"
               />
               {errors.email}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="username"
+            className={`pr-6 ${errors.username && "text-dark-red"}`}
+          >
+            نام کاربری
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="نام کاربری خود را وارد نمایید."
+            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            value={username}
+            disabled={isPending}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          {errors.username && (
+            <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
+              <Image
+                src={"/icon/alert-error.svg"}
+                width={20}
+                height={20}
+                alt="success icon"
+              />
+              {errors.username}
             </p>
           )}
         </div>
