@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import Header from "@/components/layout/header";
-// import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "نغمه",
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className="font-shabnam text-dark-blue h-full">
         <Header />
         {children}
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   );
