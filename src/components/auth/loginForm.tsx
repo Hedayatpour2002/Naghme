@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTransition } from "react";
-import * as z from "zod";
+import z from "zod";
 
 import { LoginSchema } from "@/schemas";
 
@@ -20,6 +20,8 @@ export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
+
+  const [show, setShow] = useState(false);
 
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
@@ -102,16 +104,37 @@ export default function LoginForm() {
           >
             گذرواژه
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="گذرواژه خود را وارد نمایید."
-            className="border border-silver rounded-full w-full max-w-[435px] pr-6 pl-10 py-3"
-            value={password}
-            disabled={isPending}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={show ? "text" : "password"}
+              id="password"
+              name="password"
+              placeholder="گذرواژه خود را وارد نمایید."
+              className="border border-silver rounded-full w-full max-w-[435px] pr-6 pl-10 py-3"
+              value={password}
+              disabled={isPending}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div className="absolute top-4 left-4 cursor-pointer">
+              {show ? (
+                <Image
+                  src={"/icon/eyeVisible.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                  onClick={() => setShow(false)}
+                />
+              ) : (
+                <Image
+                  src={"/icon/eyeInvisible.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                  onClick={() => setShow(true)}
+                />
+              )}
+            </div>
+          </div>
           {errors.password && (
             <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
               <Image
