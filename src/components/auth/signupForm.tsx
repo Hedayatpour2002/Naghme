@@ -13,12 +13,14 @@ import { signup } from "@/actions/signup";
 
 type Errors = {
   email?: string;
+  phoneNumber?: string;
   username?: string;
   password?: string;
 };
 
 export default function SignupForm() {
   const [email, setEmail] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
@@ -30,7 +32,7 @@ export default function SignupForm() {
 
   const validateForm = (): boolean => {
     try {
-      signupSchema.parse({ email, username, password });
+      signupSchema.parse({ email, phoneNumber, username, password });
       setErrors({});
       return true;
     } catch (err: unknown) {
@@ -51,7 +53,7 @@ export default function SignupForm() {
     setActionSuccess("");
     if (validateForm()) {
       startTransition(() => {
-        signup({ email, username, password }).then((data) => {
+        signup({ email, phoneNumber, username, password }).then((data) => {
           setActionError(data.error);
           setActionSuccess(data.success);
         });
@@ -93,6 +95,40 @@ export default function SignupForm() {
                 alt="success icon"
               />
               {errors.email}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="phoneNumber"
+            className={`pr-6 ${errors.phoneNumber && "text-dark-red"}`}
+          >
+            شماره موبایل
+          </label>
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            placeholder="090123456789"
+            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            value={phoneNumber}
+            disabled={isPending}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            onInput={(e) => {
+              const target = e.target as HTMLInputElement;
+              target.value = target.value.replace(/[^0-9]/g, "");
+            }}
+          />
+          {errors.phoneNumber && (
+            <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
+              <Image
+                src={"/icon/alert-error.svg"}
+                width={20}
+                height={20}
+                alt="success icon"
+              />
+              {errors.phoneNumber}
             </p>
           )}
         </div>
