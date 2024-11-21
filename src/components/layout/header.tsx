@@ -1,16 +1,13 @@
-"use client";
-import { useRouter } from "next/navigation";
+import AuthButtons from "@/components/authButtons";
+import Logo from "@/components/logo";
+import SearchBox from "@/components/searchBox";
 
 export default function Header() {
-  const router = useRouter();
-
-  function onClickHandler() {
-    router.push("/login");
-  }
   return (
-    <div>
-      header
-      <button onClick={onClickHandler}>ورود</button>
-    </div>
+    <header className="container flex gap-4 pt-6 pb-4 items-center justify-between">
+      <Logo />
+      <SearchBox />
+      <AuthButtons />
+    </header>
   );
 }

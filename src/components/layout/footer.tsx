@@ -86,7 +86,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="md:w-96 lg:w-auto flex justify-between items-center md:items-end mx-auto lg:mx-0 flex-col-reverse md:flex-row lg:flex-col-reverse self-center gap-6">
+        <div className="md:w-96 lg:w-auto flex justify-between items-center sm:items-end mx-auto lg:mx-0 flex-col-reverse sm:flex-row lg:flex-col-reverse self-center gap-6">
           <div className="flex flex-col gap-6 lg:gap-2 pb-2">
             <div className="text-center">ما را دنبال کنید:</div>
             <SocialMedia />

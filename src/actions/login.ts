@@ -1,5 +1,5 @@
 "use server";
-import * as z from "zod";
+import z from "zod";
 import { LoginSchema } from "@/schemas";
 
 export async function login({ email, password }: z.infer<typeof LoginSchema>) {

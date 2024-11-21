@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTransition } from "react";
-import * as z from "zod";
+import z from "zod";
 
 import { signupSchema } from "@/schemas";
 
