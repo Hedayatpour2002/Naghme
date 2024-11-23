@@ -81,7 +81,9 @@ export default function SignupForm() {
             id="email"
             name="email"
             placeholder="ایمیل خود را وارد نمایید."
-            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+              errors.email ? "border-dark-red" : "border-silver"
+            }`}
             value={email}
             disabled={isPending}
             onChange={(e) => setEmail(e.target.value)}
@@ -111,7 +113,9 @@ export default function SignupForm() {
             id="phoneNumber"
             name="phoneNumber"
             placeholder="090123456789"
-            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+              errors.phoneNumber ? "border-dark-red" : "border-silver"
+            }`}
             value={phoneNumber}
             disabled={isPending}
             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -145,7 +149,9 @@ export default function SignupForm() {
             id="username"
             name="username"
             placeholder="نام کاربری خود را وارد نمایید."
-            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+              errors.username ? "border-dark-red" : "border-silver"
+            }`}
             value={username}
             disabled={isPending}
             onChange={(e) => setUsername(e.target.value)}
@@ -175,7 +181,9 @@ export default function SignupForm() {
             id="password"
             name="password"
             placeholder="گذرواژه خود را وارد نمایید."
-            className="border border-silver rounded-full w-full max-w-[435px] pr-6 pl-10 py-3"
+            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+              errors.password ? "border-dark-red" : "border-silver"
+            }`}
             value={password}
             disabled={isPending}
             onChange={(e) => setPassword(e.target.value)}
@@ -201,7 +209,7 @@ export default function SignupForm() {
           className="bg-dark-purple text-white rounded-full py-3 px-24 self-center hover:opacity-90"
           disabled={isPending}
         >
-          ورود
+          ثبت نام
         </button>
       </form>
     </>

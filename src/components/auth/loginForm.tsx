@@ -10,6 +10,7 @@ import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
 import Image from "next/image";
 import { login } from "@/actions/login";
+import Link from "next/link";
 
 type Errors = {
   email?: string;
@@ -79,7 +80,9 @@ export default function LoginForm() {
             id="email"
             name="email"
             placeholder="ایمیل خود را وارد نمایید."
-            className="border border-silver rounded-full w-full max-w-[435px] py-3 px-6"
+            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+              errors.email ? "border-dark-red" : "border-silver"
+            }`}
             value={email}
             disabled={isPending}
             onChange={(e) => setEmail(e.target.value)}
@@ -110,7 +113,9 @@ export default function LoginForm() {
               id="password"
               name="password"
               placeholder="گذرواژه خود را وارد نمایید."
-              className="border border-silver rounded-full w-full max-w-[435px] pr-6 pl-10 py-3"
+              className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+                errors.password ? "border-dark-red" : "border-silver"
+              }`}
               value={password}
               disabled={isPending}
               onChange={(e) => setPassword(e.target.value)}
@@ -147,6 +152,9 @@ export default function LoginForm() {
             </p>
           )}
         </div>
+        <Link href={"/reset-password"} className="pr-6 text-sm">
+          گذرواژه خود را فراموش کرده اید؟
+        </Link>
         <div className="min-h-10">
           {actionError && <FormError message={actionError} />}
           {actionSuccess && <FormSuccess message={actionSuccess} />}
