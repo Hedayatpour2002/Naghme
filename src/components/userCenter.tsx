@@ -20,7 +20,7 @@ export default function UserCenter() {
               height={24}
             />
 
-            <p className="w-7 h-7 rounded-full bg-dark-purple text-white font-bold flex items-end justify-center absolute -top-2 -right-3">
+            <p className="w-7 h-7 rounded-full bg-dark-purple text-white font-bold flex items-end justify-center absolute -top-2 -right-3 text-sm">
               2
             </p>
           </div>
@@ -32,7 +32,7 @@ export default function UserCenter() {
               height={24}
             />
 
-            <p className="w-7 h-7 rounded-full bg-dark-purple text-white font-bold flex items-end justify-center absolute -top-2 -right-3">
+            <p className="w-7 h-7 rounded-full bg-dark-purple text-white font-bold flex items-end justify-center absolute -top-2 -right-3 text-sm">
               2
             </p>
           </div>
