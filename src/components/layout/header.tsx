@@ -1,6 +1,6 @@
 import Logo from "@/components/logo";
-import SearchBox from "@/components/searchBox";
-import UserCenter from "@/components/userCenter";
+import SearchBox from "@/components/layout/header/searchBox";
+import UserCenter from "@/components/layout/header/userCenter";
 
 export default function Header() {
   return (

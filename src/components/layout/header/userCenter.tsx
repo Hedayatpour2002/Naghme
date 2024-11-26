@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import AuthButtons from "@/components/authButtons";
-import ProfileDropDown from "@/components/profileDropDown";
+import AuthButtons from "@/components/layout/header/authButtons";
+import ProfileDropDown from "@/components/layout/header/profileDropDown";
 
 export default function UserCenter() {
   const [isLogin, setIsLogin] = useState(false);
