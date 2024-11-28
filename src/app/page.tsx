@@ -1,6 +1,6 @@
-import Hero from "@/components/home/hero";
-import MembersComment from "@/components/home/membersComment";
-import Newsletter from "@/components/newsletter";
+import Hero from "@/components/layout/home/hero";
+import MembersComment from "@/components/layout/home/membersComment";
+import Newsletter from "@/components/layout/home/newsletter";
 
 export default function Home() {
   return (
