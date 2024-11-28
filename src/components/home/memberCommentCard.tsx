@@ -21,9 +21,9 @@ export default function MemberCommentCard({
           width={70}
           height={70}
         />
-        <span className="font-bold text-xl">{name}</span>
+        <span className="font-bold">{name}</span>
       </div>
-      <p className="text-lg">{desc}</p>
+      <p>{desc}</p>
     </div>
   );
 }

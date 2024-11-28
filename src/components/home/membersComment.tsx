@@ -76,7 +76,7 @@ export default function MembersComment() {
   const swiperRef = useRef<SwiperCore | null>(null);
 
   return (
-    <section className="flex flex-col bg-light-ligth-purple pt-10">
+    <section className="flex flex-col justify-between bg-light-ligth-purple pt-10">
       <p className="text-center font-bold text-2xl sm:text-3xl">
         <span>نظرات </span>
         <span className="text-dark-red">کاربران </span>
@@ -109,7 +109,7 @@ export default function MembersComment() {
           }}
           virtual
           loop={true}
-          className="!py-10 !px-4"
+          className="!py-10 !px-4 min-h-[313px]"
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           autoplay={{
             delay: 5000,
