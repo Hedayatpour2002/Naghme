@@ -1,3 +1,4 @@
+import MembersComment from "@/components/home/membersComment";
 import Newsletter from "@/components/newsletter";
 
 export default function Home() {
@@ -5,7 +6,7 @@ export default function Home() {
     <main>
       <h1>خوش آمدید به نغمه</h1>
       <p>این صفحه اصلی وبسایت است.</p>
-
+      <MembersComment/>
       <Newsletter />
     </main>
   );

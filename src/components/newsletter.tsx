@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Newsletter() {
   return (
-    <section className="container">
+    <section className="container pt-16 pb-8">
       <div className="bg-[#6C5DD3] py-14 px-1 flex flex-col items-center gap-4 relative overflow-hidden rounded-xl">
         <p className="text-2xl sm:text-3xl font-bold z-10 text-white">
           به خبرنامه ما بپیوندید
