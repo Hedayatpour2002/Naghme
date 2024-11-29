@@ -4,10 +4,10 @@ import { Virtual, Autoplay } from "swiper/modules";
 import { useRef } from "react";
 import SwiperCore from "swiper";
 
-import MemberCommentCard from "./memberCommentCard";
+import MemberCommentCard from "@/components/layout/home/memberCommentCard";
+import SliderControl from "@/components/sliderControls";
 
 import "swiper/css";
-import Image from "next/image";
 
 const datas = [
   {
@@ -82,17 +82,7 @@ export default function MembersComment() {
         <span className="text-dark-red">کاربران </span>
       </p>
       <div className="container flex justify-between items-center">
-        <button
-          className="w-14 h-14 rounded-full shadow-2xl flex items-center justify-center flex-shrink-0 bg-white"
-          onClick={() => swiperRef.current?.slidePrev()}
-        >
-          <Image
-            src={"/icon/arrow-right.svg"}
-            alt="arrow-right-icon"
-            width={24}
-            height={24}
-          />
-        </button>
+        <SliderControl direction="prev" swiperRef={swiperRef} />
 
         <Swiper
           modules={[Virtual, Autoplay]}
@@ -106,8 +96,11 @@ export default function MembersComment() {
               slidesPerView: 3,
               spaceBetween: 50,
             },
+            1536: {
+              slidesPerView: 4,
+            },
           }}
-          virtual
+          virtual={false}
           loop={true}
           className="!py-10 !px-4 min-h-[313px]"
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -124,17 +117,7 @@ export default function MembersComment() {
           ))}
         </Swiper>
 
-        <button
-          className="w-14 h-14 rounded-full shadow-2xl flex items-center justify-center flex-shrink-0 bg-white"
-          onClick={() => swiperRef.current?.slideNext()}
-        >
-          <Image
-            src={"/icon/arrow-left.svg"}
-            alt="arrow-left-icon"
-            width={24}
-            height={24}
-          />
-        </button>
+        <SliderControl direction="next" swiperRef={swiperRef} />
       </div>
     </section>
   );
