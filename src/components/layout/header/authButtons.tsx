@@ -18,7 +18,7 @@ export default function AuthButtons() {
         />
       </Link>
       <Link
-        href={"login"}
+        href={"/login"}
         className="px-3 py-2 bg-light-purple text-dark-purple rounded-xl hover:opacity-90"
       >
         ورود

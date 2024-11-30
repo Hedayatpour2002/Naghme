@@ -79,7 +79,7 @@ export default function ResetPassword() {
         </button>
 
         <Link
-          href={"/login"}
+          href={"login"}
           className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 hover:opacity-90 text-center"
         >
           بازشگت به صفحه ورود

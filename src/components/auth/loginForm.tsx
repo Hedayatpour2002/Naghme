@@ -11,13 +11,18 @@ import FormSuccess from "@/components/auth/formSuccess";
 import Image from "next/image";
 import { login } from "@/actions/login";
 import Link from "next/link";
+import { LoginAdmin } from "@/actions/loginAdmin";
 
 type Errors = {
   email?: string;
   password?: string;
 };
 
-export default function LoginForm() {
+type LoginFormProps = {
+  role: "admin" | "user";
+};
+
+export default function LoginForm({ role }: LoginFormProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
@@ -52,10 +57,16 @@ export default function LoginForm() {
     setActionSuccess("");
     if (validateForm()) {
       startTransition(() => {
-        login({ email, password }).then((data) => {
-          setActionError(data.error);
-          setActionSuccess(data.success);
-        });
+        if (role === "user")
+          login({ email, password }).then((data) => {
+            setActionError(data.error);
+            setActionSuccess(data.success);
+          });
+        else
+          LoginAdmin({ email, password }).then((data) => {
+            setActionError(data.error);
+            setActionSuccess(data.success);
+          });
       });
     }
   };
@@ -152,7 +163,7 @@ export default function LoginForm() {
             </p>
           )}
         </div>
-        <Link href={"/reset-password"} className="pr-6 text-sm">
+        <Link href="reset-password" className="pr-6 text-sm">
           گذرواژه خود را فراموش کرده اید؟
         </Link>
         <div className="min-h-10">
