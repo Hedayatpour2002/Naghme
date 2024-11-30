@@ -19,6 +19,8 @@ type Errors = {
 };
 
 export default function SignupForm() {
+  const [show, setShow] = useState(false);
+
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -176,18 +178,40 @@ export default function SignupForm() {
           >
             گذرواژه
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="گذرواژه خود را وارد نمایید."
-            className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
-              errors.password ? "border-dark-red" : "border-silver"
-            }`}
-            value={password}
-            disabled={isPending}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type={show ? "text" : "password"}
+              id="password"
+              name="password"
+              placeholder="گذرواژه خود را وارد نمایید."
+              className={`border rounded-full w-full max-w-[435px] py-3 px-6 ${
+                errors.password ? "border-dark-red" : "border-silver"
+              }`}
+              value={password}
+              disabled={isPending}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <div className="absolute top-4 left-4 cursor-pointer">
+              {show ? (
+                <Image
+                  src={"/icon/eyeVisible.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                  onClick={() => setShow(false)}
+                />
+              ) : (
+                <Image
+                  src={"/icon/eyeInvisible.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                  onClick={() => setShow(true)}
+                />
+              )}
+            </div>
+          </div>
           {errors.password && (
             <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
               <Image

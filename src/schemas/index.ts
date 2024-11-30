@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 
 export const LoginSchema = z.object({
   email: z
@@ -43,3 +43,32 @@ export const signupSchema = z.object({
     .min(8, { message: "گذرواژه باید حداقل شامل 8 حرف باشد!" })
     .trim(),
 });
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .regex(/[0-9]/, { message: "رمز عبور باید حداقل شامل یک عدد باشد!" })
+      .regex(/[a-zA-Z]/, {
+        message: "رمز عبور باید حداقل شامل یک حرف انگلیسی باشد!",
+      })
+      .min(8, { message: "رمز عبور باید حداقل شامل 8 حرف باشد!" })
+      .trim(),
+    confirmPassword: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "رمز عبور و تکرار آن باید یکسان باشند!",
+        path: ["confirmPassword"],
+      });
+    }
+    if (data.confirmPassword === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "پرکردن این فیلد الازمی است!",
+        path: ["confirmPassword"],
+      });
+    }
+  });
