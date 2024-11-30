@@ -19,7 +19,7 @@ export default function ResetPassword() {
     setErrors({});
 
     if (!/^09\d{9}$/.test(phoneNumber)) {
-      setErrors({ phoneNumber: "شماره موبایل معتبر نیست" });
+      setErrors({ phoneNumber: "شماره موبایل معتبر نیست!" });
       return;
     }
 
