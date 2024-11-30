@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="container flex flex-col md:flex-row-reverse items-center justify-center  gap-4 md:w-96 lg:w-auto lg:gap-16">
+    <main className="container py-8 flex flex-col md:flex-row-reverse items-center justify-center  gap-4 md:w-96 lg:w-auto lg:gap-16">
       <Image
         src="/images/outh.svg"
         alt="books"
