@@ -109,7 +109,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("token", token);
         apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        // بازیابی اطلاعات ادمین
         const adminResponse = await apiClient.get("/api/admin", {
           data: { token },
         });
@@ -117,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setIsAuthenticated(true);
 
-        router.push("/admin/dashboard"); // ریدایرکت به داشبورد ادمین
+        router.push("/admin/dashboard");
       } else {
         throw new Error(response.data.message || "خطا در ورود به سیستم");
       }
