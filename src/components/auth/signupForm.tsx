@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTransition } from "react";
+import Image from "next/image";
 import z from "zod";
+import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/context/authContext";
 import { signupSchema } from "@/schemas";
-
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
-import Image from "next/image";
-import { signup } from "@/actions/signup";
 
 type Errors = {
   email?: string;
@@ -20,17 +20,23 @@ type Errors = {
 
 export default function SignupForm() {
   const [show, setShow] = useState(false);
-
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
-
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
-
   const [isPending, startTransition] = useTransition();
+
+  const { isAuthenticated, register } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {
@@ -49,16 +55,38 @@ export default function SignupForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionError("");
     setActionSuccess("");
+
     if (validateForm()) {
-      startTransition(() => {
-        signup({ email, phoneNumber, username, password }).then((data) => {
-          setActionError(data.error);
-          setActionSuccess(data.success);
-        });
+      startTransition(async () => {
+        try {
+          await register(email, password, username, phoneNumber);
+
+          setActionSuccess("ثبت‌نام موفقیت‌آمیز بود!");
+        } catch (error: any) {
+          if (error.response) {
+            const { status, data } = error.response;
+
+            if (status === 400) {
+              setActionError(data.message || "خطای اعتبارسنجی در ثبت‌نام.");
+            }
+            else if (status === 500) {
+              setActionError(
+                data.message || "خطای سرور. لطفاً دوباره تلاش کنید."
+              );
+            }
+            else {
+              setActionError(
+                "خطای ناشناخته در ثبت‌نام. لطفاً دوباره تلاش کنید."
+              );
+            }
+          } else {
+            setActionError("مشکلی در ارتباط با سرور رخ داده است.");
+          }
+        }
       });
     }
   };
@@ -71,6 +99,7 @@ export default function SignupForm() {
         onSubmit={handleSubmit}
         className="w-full max-w-[454px] p-4 flex flex-col gap-6 lg:w-[450px]"
       >
+        {/* Email Input */}
         <div className="flex flex-col gap-2">
           <label
             htmlFor="email"
@@ -96,7 +125,7 @@ export default function SignupForm() {
                 src={"/icon/alert-error.svg"}
                 width={20}
                 height={20}
-                alt="success icon"
+                alt="error icon"
               />
               {errors.email}
             </p>
@@ -224,6 +253,7 @@ export default function SignupForm() {
             </p>
           )}
         </div>
+
         <div className="min-h-10">
           {actionError && <FormError message={actionError} />}
           {actionSuccess && <FormSuccess message={actionSuccess} />}

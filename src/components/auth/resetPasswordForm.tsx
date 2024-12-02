@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { resetPasswordSchema } from "@/schemas";
 import { z } from "zod";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/authContext";
 
 type ResetPasswordFormProps = {
   onConfirm: () => void;
@@ -19,6 +21,15 @@ export default function ResetPasswordForm({
     password?: string;
     confirmPassword?: string;
   }>({});
+
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {

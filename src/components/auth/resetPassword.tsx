@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import OTPInput from "@/components/auth/OTPInput";
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
+import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 
 type Errors = {
   phoneNumber?: string;
@@ -18,6 +20,15 @@ export default function ResetPassword() {
   const [otpKey, setOtpKey] = useState<number>(0);
   const [showResetPasswordForm, setShowResetPasswordForm] =
     useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const handlePhoneNumberSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

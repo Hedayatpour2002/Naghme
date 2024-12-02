@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTransition } from "react";
 import z from "zod";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/context/authContext";
 import { LoginSchema } from "@/schemas";
-
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
-import Image from "next/image";
-import { login } from "@/actions/login";
-import Link from "next/link";
-import { LoginAdmin } from "@/actions/loginAdmin";
 
 type Errors = {
   email?: string;
@@ -23,16 +22,21 @@ type LoginFormProps = {
 };
 
 export default function LoginForm({ role }: LoginFormProps) {
+  const { isAuthenticated, loginUser, loginAdmin } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
-
   const [show, setShow] = useState(false);
-
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
-
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {
@@ -51,22 +55,30 @@ export default function LoginForm({ role }: LoginFormProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionError("");
     setActionSuccess("");
+
     if (validateForm()) {
-      startTransition(() => {
-        if (role === "user")
-          login({ email, password }).then((data) => {
-            setActionError(data.error);
-            setActionSuccess(data.success);
-          });
-        else
-          LoginAdmin({ email, password }).then((data) => {
-            setActionError(data.error);
-            setActionSuccess(data.success);
-          });
+      startTransition(async () => {
+        try {
+          if (role === "user") {
+            await loginUser(email, password);
+          } else if (role === "admin") {
+            await loginAdmin(email, password); 
+          } else {
+            throw new Error("نقش نامعتبر است.");
+          }
+
+          setActionSuccess("ورود موفقیت‌آمیز بود!");
+        } catch (error: any) {
+          console.error("ورود ناموفق بود:", error);
+          setActionError(
+            error.response?.data?.message ||
+              "ورود ناموفق بود. لطفاً دوباره تلاش کنید."
+          );
+        }
       });
     }
   };
@@ -99,12 +111,12 @@ export default function LoginForm({ role }: LoginFormProps) {
             onChange={(e) => setEmail(e.target.value)}
           />
           {errors.email && (
-            <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
+            <p className="text-dark-red pr-6 rounded-xl py-2 flex gap-2 items-center ">
               <Image
                 src={"/icon/alert-error.svg"}
                 width={20}
                 height={20}
-                alt="success icon"
+                alt="error icon"
               />
               {errors.email}
             </p>
@@ -135,7 +147,7 @@ export default function LoginForm({ role }: LoginFormProps) {
               {show ? (
                 <Image
                   src={"/icon/eyeVisible.svg"}
-                  alt=""
+                  alt="show password"
                   width={20}
                   height={20}
                   onClick={() => setShow(false)}
@@ -143,7 +155,7 @@ export default function LoginForm({ role }: LoginFormProps) {
               ) : (
                 <Image
                   src={"/icon/eyeInvisible.svg"}
-                  alt=""
+                  alt="hide password"
                   width={20}
                   height={20}
                   onClick={() => setShow(true)}
@@ -152,24 +164,27 @@ export default function LoginForm({ role }: LoginFormProps) {
             </div>
           </div>
           {errors.password && (
-            <p className="text-dark-red pr-6  rounded-xl py-2 flex gap-2 items-center ">
+            <p className="text-dark-red pr-6 rounded-xl py-2 flex gap-2 items-center ">
               <Image
                 src={"/icon/alert-error.svg"}
                 width={20}
                 height={20}
-                alt="success icon"
+                alt="error icon"
               />
               {errors.password}
             </p>
           )}
         </div>
+
         <Link href="reset-password" className="pr-6 text-sm">
           گذرواژه خود را فراموش کرده اید؟
         </Link>
+
         <div className="min-h-10">
           {actionError && <FormError message={actionError} />}
           {actionSuccess && <FormSuccess message={actionSuccess} />}
         </div>
+
         <button
           type="submit"
           className="bg-dark-purple text-white rounded-full py-3 px-24 self-center hover:opacity-90"

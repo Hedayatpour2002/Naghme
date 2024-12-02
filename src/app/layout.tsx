@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AuthProvider } from "@/context/authContext";
 
 import "./globals.css";
 import Header from "@/components/layout/header/header";
@@ -19,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className="font-shabnam text-dark-blue h-full">
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
