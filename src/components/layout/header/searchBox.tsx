@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import Menu from "@/components/layout/header/menu";
 
 export default function SearchBox() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,7 +10,7 @@ export default function SearchBox() {
     <div className="flex items-stretch justify-between lg:max-w-[600px] flex-grow">
       <button
         onClick={() => setMenuOpen((prev) => !prev)}
-        className={`border border-l-transparent rounded-tr-xl rounded-br-xl flex gap-2 sm:gap-4 py-2 sm:py-3 sm:px-7 sm:text-lg items-center font-bold pl-2 flex-shrink-0 transition px-2 ${
+        className={`border border-l-transparent rounded-tr-xl rounded-br-xl flex gap-2 sm:gap-4 py-2 sm:py-3 sm:px-7 sm:text-lg items-center font-bold pl-2 flex-shrink-0 transition px-2 relative ${
           menuOpen
             ? "bg-dark-purple text-white border-dark-purple"
             : "bg-white text-dark-purple border-light-silver "
@@ -58,6 +59,12 @@ export default function SearchBox() {
             fill={menuOpen ? "#fff" : "#8D28AD"}
           />
         </svg>
+        {menuOpen && (
+          <div
+            className="hidden sm:block absolute -bottom-9 left-0 right-0 mx-auto bg-dark-purple z-50 h-2.5 w-2.5"
+            style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }}
+          ></div>
+        )}
       </button>
 
       <div className="flex flex-grow gap-1 items-center md:px-4 border border-light-silver rounded-tl-xl rounded-bl-xl  focus-within:border-dark-purple transition px-2">
@@ -76,6 +83,8 @@ export default function SearchBox() {
           />
         </button>
       </div>
+
+      {menuOpen && <Menu />}
     </div>
   );
 }
