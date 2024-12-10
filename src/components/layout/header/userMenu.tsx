@@ -9,7 +9,7 @@ export default function UserMenu({ signOut }: UserMenuProps) {
   const menuItem = [
     { title: "کتاب های من", address: "/my-book", icon: "/icon/my-books.svg" },
     { title: "سبد خرید", address: "/cart", icon: "/icon/cart.svg" },
-    { title: "مورد علاقه ها", address: "/my-", icon: "/icon/love.svg" },
+    { title: "مورد علاقه ها", address: "/favorites", icon: "/icon/love.svg" },
     { title: "تنظیمات", address: "/settings", icon: "/icon/settings.svg" },
   ];
 

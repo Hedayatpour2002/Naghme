@@ -52,13 +52,12 @@ export default function ResetPasswordForm({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("رمز عبور جدید تایید شد:", password);
       onConfirm();
     }
   };
 
   return (
-    <div className="w-full max-w-[454px] p-4 flex flex-col gap-6 md:min-w-[400px] min-w-[350px]">
+    <div className="w-full flex flex-col gap-6 min-w-[350px]">
       <p className="font-bold text-center">رمز عبور جدید خود را وارد کنید.</p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">

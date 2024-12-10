@@ -44,6 +44,22 @@ export const signupSchema = z.object({
     .trim(),
 });
 
+export const sendOTPSchema = z.object({
+  email: z
+    .string()
+    .email({
+      message: "لطفا یک ایمیل معتبر وارد کنید!",
+    })
+    .max(50, "ایمیل حداکثر میتواند شامل 50 حرف باشد!")
+    .trim(),
+  phoneNumber: z
+    .string()
+    .regex(/^\d{11}$/, {
+      message: "شماره تلفن باید دقیقا 11 رقم باشد!",
+    })
+    .trim(),
+});
+
 export const resetPasswordSchema = z
   .object({
     password: z

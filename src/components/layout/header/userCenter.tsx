@@ -1,21 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 
+import { useAuth } from "@/context/authContext";
 import AuthButtons from "@/components/layout/header/authButtons";
 import ProfileDropDown from "@/components/layout/header/profileDropDown";
 
 export default function UserCenter() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
-
-  function signOut() {
-    setIsLogin(false);
-  }
+  const { isAuthenticated , logout} = useAuth();
+  
 
   return (
     <>
-      {isLogin ? (
+      {isAuthenticated ? (
         <div className="flex items-center gap-6">
           <div className="h-14 w-14 border border-light-silver items-center justify-center cursor-pointer rounded-2xl relative hidden md:flex">
             <Image
@@ -42,7 +39,7 @@ export default function UserCenter() {
             </p>
           </div>
 
-          <ProfileDropDown signOut={signOut} />
+          <ProfileDropDown signOut={logout} />
         </div>
       ) : (
         <AuthButtons />

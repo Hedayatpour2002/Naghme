@@ -24,9 +24,13 @@ interface AuthContextType {
     phoneNumber: string
   ) => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
-  resetPassword: (token: string, newPassword: string) => Promise<void>;
-  sendOtp: (emailOrPhone: string) => Promise<void>;
-  verifyOtp: (otp: string) => Promise<void>;
+  resetPassword: (
+    emaill: string,
+    phoneNumber: string,
+    otp: string,
+    newPassword: string
+  ) => Promise<void>;
+  sendOtp: (email: string, phoneNumber: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -60,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.data.result) {
         const token = response.data.token;
+        document.cookie = `token=${token}; path=/; Secure; HttpOnly`;
 
         localStorage.setItem("token", token);
         apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -67,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // ----
         // todo
         // ----
-        const userResponse = await apiClient.get("/api/user", {
+        const userResponse = await apiClient.get("/user", {
           data: { token },
         });
         setUser(userResponse.data);
@@ -190,38 +195,75 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const sendOtp = async (phone: string) => {
+  const sendOtp = async (email: string, phoneNumber: string): Promise<void> => {
     try {
-      const response = await axios.post("/api/send-otp", { phone });
-      console.log("OTP sent successfully:", response.data);
-      alert("کد تایید ارسال شد.");
-    } catch (error) {
-      console.error("Failed to send OTP:", error);
+      const response = await axios.get("/otp/retrieve", {
+        params: {
+          email,
+          phoneNumber,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log(response.data.message);
+        alert("کد تایید با موفقیت ارسال شد.");
+      } else if (response.status === 400) {
+        const message = response.data.message || "Validation error";
+        console.error("Send OTP failed:", message);
+        alert(`خطا در ارسال کد: ${message}`);
+      } else {
+        console.error("Unknown registration response:", response);
+        alert("خطای ناشناخته در ثبت نام. لطفاً دوباره تلاش کنید.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          console.error("خطا:", data.message);
+          alert(`خطا: ${data.message}`);
+        } else if (status === 500) {
+          console.error("خطای سرور:", data.message);
+          alert("خطای سرور: لطفاً بعداً دوباره تلاش کنید.");
+        }
+      } else {
+        console.error("خطای ناشناخته:", error.message);
+        alert("خطای ناشناخته رخ داده است.");
+      }
       throw error;
     }
   };
 
-  const verifyOtp = async (otp: string) => {
+  const resetPassword = async (
+    email: string,
+    phoneNumber: string,
+    otp: string,
+    newPassword: string
+  ): Promise<void> => {
     try {
-      const response = await axios.post("/api/verify-otp", { otp });
-      console.log("OTP verified successfully:", response.data);
-      alert("کد تایید با موفقیت تایید شد.");
-    } catch (error) {
-      console.error("Failed to verify OTP:", error);
-      throw error;
-    }
-  };
-
-  const resetPassword = async (token: string, newPassword: string) => {
-    try {
-      const response = await axios.post("/api/reset-password", {
-        token,
+      const response = await axios.put("/retrieve-password", {
+        email,
+        phoneNumber,
+        otp,
         newPassword,
       });
-      console.log("Password reset successfully:", response.data);
-      alert("رمز عبور با موفقیت تغییر یافت.");
-    } catch (error) {
-      console.error("Password reset failed:", error);
+      if (response.status === 200) {
+        console.log(response.data.message);
+        alert("رمز عبور با موفقیت تغییر یافت.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          console.error("خطا:", data.message);
+          alert(`خطا: ${data.message}`);
+        } else if (status === 500) {
+          console.error("خطای سرور:", data.message);
+          alert("خطای سرور: لطفاً بعداً دوباره تلاش کنید.");
+        }
+      } else {
+        console.error("خطای ناشناخته:", error.message);
+        alert("خطای ناشناخته رخ داده است.");
+      }
       throw error;
     }
   };
@@ -246,7 +288,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         changePassword,
         resetPassword,
         sendOtp,
-        verifyOtp,
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import UserCenter from "@/components/layout/header/userCenter";
 export default function Header() {
   return (
     <header className="border-b border-light-light-silver shadow">
-      <div className="container flex gap-4 pt-6 pb-4 items-center justify-between">
+      <div className="container flex gap-4 pt-6 pb-4 items-center justify-between relative">
         <Logo />
         <SearchBox />
         <UserCenter />

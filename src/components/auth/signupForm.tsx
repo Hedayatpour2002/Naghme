@@ -99,7 +99,6 @@ export default function SignupForm() {
         onSubmit={handleSubmit}
         className="w-full max-w-[454px] p-4 flex flex-col gap-6 lg:w-[450px]"
       >
-        {/* Email Input */}
         <div className="flex flex-col gap-2">
           <label
             htmlFor="email"
