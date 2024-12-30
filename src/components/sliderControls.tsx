@@ -3,7 +3,7 @@ import SwiperCore from "swiper";
 
 interface SliderControlProps {
   direction: "prev" | "next";
-  swiperRef: React.RefObject<SwiperCore>;
+  swiperRef: React.RefObject<SwiperCore | null>;
 }
 
 export default function SliderControl({

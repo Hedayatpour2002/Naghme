@@ -33,13 +33,13 @@ export default function OTPInput({ length = 4, onComplete }: InputProps) {
     (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
       if (e.key === "Backspace" && !OTP[index] && index > 0) {
         const updatedOtp = [...OTP];
-        updatedOtp[index - 1] = ""; 
+        updatedOtp[index - 1] = "";
         setOTP(updatedOtp);
         inputRefs.current[index - 1]?.focus();
       } else if (e.key === "ArrowRight" && index > 0) {
-        inputRefs.current[index - 1]?.focus(); 
+        inputRefs.current[index - 1]?.focus();
       } else if (e.key === "ArrowLeft" && index < length - 1) {
-        inputRefs.current[index + 1]?.focus(); 
+        inputRefs.current[index + 1]?.focus();
       }
     },
     [OTP, length]
@@ -59,7 +59,9 @@ export default function OTPInput({ length = 4, onComplete }: InputProps) {
           value={OTP[index]}
           onChange={(e) => handleInputChange(e.target.value, index)}
           onKeyDown={(e) => handleKeyDown(e, index)}
-          ref={(ref) => setRef(ref, index)}
+          ref={(ref) => {
+            setRef(ref, index);
+          }}
           className="border border-solid !rounded-lg border-light-silver focus:border-dark-purple p-5 outline-none text-center"
         />
       ))}
