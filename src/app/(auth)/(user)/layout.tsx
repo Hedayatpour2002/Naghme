@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/context/authContext";
 
-import "./globals.css";
-import Header from "@/components/layout/header/header";
+import "@/app/globals.css";
+import Image from "next/image";
 import Footer from "@/components/layout/footer/footer";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,8 +21,16 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body className="font-shabnam text-dark-blue h-full">
         <AuthProvider>
-          <Header />
-          {children}
+          <main className="container min-h-screen py-8 flex flex-col md:flex-row-reverse items-center justify-center  gap-4 md:w-96 lg:w-auto lg:gap-16">
+            <Image
+              src="/images/outh.svg"
+              alt="books"
+              width={737}
+              height={825}
+              className="flex-shrink"
+            />
+            {children}
+          </main>
           <Footer />
         </AuthProvider>
       </body>
