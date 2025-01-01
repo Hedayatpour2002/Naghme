@@ -1,8 +1,8 @@
-import Bestsellers from "@/components/layout/home/bestsellers";
-import FeaturedPicks from "@/components/layout/home/featuredPicks";
-import Hero from "@/components/layout/home/hero";
-import MembersComment from "@/components/layout/home/membersComment";
-import Newsletter from "@/components/layout/home/newsletter";
+import Bestsellers from "@/components/home/bestsellers";
+import FeaturedPicks from "@/components/home/featuredPicks";
+import Hero from "@/components/home/hero";
+import MembersComment from "@/components/home/membersComment";
+import Newsletter from "@/components/home/newsletter";
 
 export default function Home() {
   return (
