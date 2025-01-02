@@ -1,12 +1,12 @@
 "use client";
 
-import {  useState } from "react";
+import { useState } from "react";
 import { resetPasswordSchema } from "@/schemas";
 import { z } from "zod";
 import Image from "next/image";
 
 type ResetPasswordFormProps = {
-  onConfirm: () => void;
+  onConfirm: (newPassword: string) => void;
 };
 
 export default function ResetPasswordForm({
@@ -41,7 +41,7 @@ export default function ResetPasswordForm({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      onConfirm();
+      onConfirm(password);
     }
   };
 
@@ -95,7 +95,7 @@ export default function ResetPasswordForm({
                 src={"/icon/alert-error.svg"}
                 width={20}
                 height={20}
-                alt="success icon"
+                alt="error icon"
               />
               {errors.password}
             </p>
@@ -147,7 +147,7 @@ export default function ResetPasswordForm({
                 src={"/icon/alert-error.svg"}
                 width={20}
                 height={20}
-                alt="success icon"
+                alt="error icon"
               />
               {errors.confirmPassword}
             </p>

@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 import OTPInput from "@/components/auth/OTPInput";
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
 import { sendOTPSchema } from "@/schemas";
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
+import { resetPassword, sendOtp } from "@/services/authService";
 
 type Errors = {
   email?: string;
@@ -23,8 +25,10 @@ export default function ResetPassword() {
   const [isOtpSent, setIsOtpSent] = useState<boolean>(false);
   const [otpKey, setOtpKey] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
+  const [otp, setOtp] = useState<string>("");
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
+  const router = useRouter();
 
   const validateForm = (): boolean => {
     try {
@@ -43,46 +47,89 @@ export default function ResetPassword() {
     }
   };
 
-  const handleformSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function sendOtpFun() {
+    if (validateForm()) {
+      startTransition(async () => {
+        try {
+          const response = await sendOtp(email, phoneNumber);
+
+          if (response.result) {
+            // setActionSuccess("کد OTP با موفقیت ارسال شد.");
+            console.log("کد OTP با موفقیت ارسال شد.");
+            setIsOtpSent(true);
+          } else {
+            setActionError("خطا در ارسال کد OTP. لطفاً دوباره تلاش کنید.");
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            setActionError(error.message);
+          } else {
+            setActionError("خطای ناشناخته. لطفاً دوباره تلاش کنید.");
+          }
+        }
+      });
+    }
+  }
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setActionError("");
     setActionSuccess("");
 
-    // todo
-    // use setActionError and setActionSuccess
-
-    if (validateForm()) {
-      startTransition(async () => {
-        // todo
-        // generate new OTP
-        setIsOtpSent(true);
-      });
-    }
+    sendOtpFun();
   };
 
-  const handleOtpComplete = (otp: string) => {
-    // todo
-    // set OTP
-
+  const handleOtp = (otp: string) => {
+    setOtp(otp);
     console.log("کد وارد شده:", otp);
   };
 
   const handleResendCode = () => {
-    // todo
-    //  generate new OTP
-
+    sendOtpFun();
     console.log("ارسال دوباره کد");
     setOtpKey((prevKey) => prevKey + 1);
   };
 
   const handleEditPhoneNumber = () => {
+    setActionError("");
+    setActionSuccess("");
     setIsOtpSent(false);
     setPhoneNumber("");
   };
 
-  const confirmHandler = () => {
-    // todo
-    // verify OTP
+  const confirmHandler = (newPassword: string) => {
+    setActionError("");
+    setActionSuccess("");
+
+    startTransition(async () => {
+      console.log({
+        email,
+        phoneNumber,
+        otp,
+        newPassword,
+      });
+      try {
+        const response = await resetPassword(
+          email,
+          phoneNumber,
+          otp,
+          newPassword
+        );
+        if (response.result) {
+          setActionSuccess("رمز شما با موفقیت تغییر پیدا کرد");
+          console.log("رمز شما با موفقیت تغییر پیدا کرد");
+          router.push("/login");
+        } else {
+          setActionError("خطای ناشناخته. لطفاً دوباره تلاش کنید.");
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setActionError(error.message);
+        } else {
+          setActionError("خطای ناشناخته. لطفاً دوباره تلاش کنید.");
+        }
+      }
+    });
   };
 
   return (
@@ -90,7 +137,7 @@ export default function ResetPassword() {
       <p className="font-bold">گذرواژه خود را فراموش کرده‌اید؟</p>
       {!isOtpSent ? (
         <form
-          onSubmit={handleformSubmit}
+          onSubmit={handleFormSubmit}
           className="w-full max-w-[454px] p-4 flex flex-col gap-6 lg:w-[450px]"
         >
           <div className="flex flex-col gap-2">
@@ -185,7 +232,7 @@ export default function ResetPassword() {
           <p className="text-center">
             کد ارسال شده به شماره {phoneNumber} را وارد کنید:
           </p>
-          <OTPInput key={otpKey} length={4} onComplete={handleOtpComplete} />
+          <OTPInput key={otpKey} length={4} onComplete={handleOtp} />
           <button
             onClick={handleResendCode}
             className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 hover:opacity-90 text-center"
@@ -201,6 +248,11 @@ export default function ResetPassword() {
           >
             ویرایش شماره
           </button>
+
+          <div className="min-h-10">
+            {actionError && <FormError message={actionError} />}
+            {actionSuccess && <FormSuccess message={actionSuccess} />}
+          </div>
         </div>
       )}
     </>

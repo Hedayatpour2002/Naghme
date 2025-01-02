@@ -22,9 +22,7 @@ export default function OTPInput({ length = 4, onComplete }: InputProps) {
         inputRefs.current[index + 1]?.focus();
       }
 
-      if (updatedOtp.every((digit) => digit !== "")) {
-        onComplete(updatedOtp.join(""));
-      }
+      onComplete(updatedOtp.join(""));
     },
     [OTP, length, onComplete]
   );
@@ -50,7 +48,7 @@ export default function OTPInput({ length = 4, onComplete }: InputProps) {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-5">
+    <div className="grid grid-cols-4 gap-5" dir="ltr">
       {Array.from({ length }).map((_, index) => (
         <input
           key={index}
