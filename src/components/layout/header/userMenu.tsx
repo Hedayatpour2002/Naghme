@@ -1,17 +1,24 @@
+import { removeAuthHeader } from "@/utils/axiosInstance";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-interface UserMenuProps {
-  signOut: () => void;
-}
+export default function UserMenu() {
+  const router = useRouter();
 
-export default function UserMenu({ signOut }: UserMenuProps) {
   const menuItem = [
     { title: "کتاب های من", address: "/my-book", icon: "/icon/my-books.svg" },
     { title: "سبد خرید", address: "/cart", icon: "/icon/cart.svg" },
     { title: "مورد علاقه ها", address: "/favorites", icon: "/icon/love.svg" },
     { title: "تنظیمات", address: "/settings", icon: "/icon/settings.svg" },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    removeAuthHeader();
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    router.push("/login");
+  };
 
   return (
     <ul className="flex flex-col gap-7 p-8 font-bold text-sm text-light-blue bg-white border-light-ligth-purple shadow-xl min-w-[227px] rounded-2xl">
@@ -24,7 +31,7 @@ export default function UserMenu({ signOut }: UserMenuProps) {
         </li>
       ))}
       <li>
-        <button className="flex gap-2 items-center" onClick={signOut}>
+        <button className="flex gap-2 items-center" onClick={handleLogout}>
           <Image
             src={"/icon/exit.svg"}
             alt="exit-icon"

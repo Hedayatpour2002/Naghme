@@ -1,53 +1,87 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import axios from "axios";
+import { jwtVerify } from "jose";
 
-// Define routes with their access type
-const routes = [
-  { path: "/dashboard", protected: true },
-  { path: "/login", protected: false },
-  { path: "/signup", protected: false },
-  { path: "/", protected: false },
-  { path: "/cart", protected: true },
-  { path: "/settings", protected: true },
-];
-
-// Helper to find route configuration
-const getRouteConfig = (path) => routes.find((route) => route.path === path);
-
-async function validateToken(token) {
-  try {
-    const response = await axios.post(
-      "https://your-backend-url/validate-token",
-      { token }
-    );
-    return response.data.valid; // Assuming backend returns { valid: true/false }
-  } catch (error) {
-    console.error("Token validation failed:", error.message);
-    return false;
-  }
+// Define the structure of the User object
+interface User {
+  user_id?: string;
+  admin_id?: string;
+  user_name?: string;
+  admin_name?: string;
+  email: string;
+  active?: boolean;
+  comment?: boolean;
+  role: "admin" | "user";
 }
 
-export default async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname;
-  const cookie = (await cookies()).get("token")?.value;
+// List of protected routes
+const PROTECTED_ROUTES = ["/dashboard", "/cart", "/settings", "/admin"];
+// Handle restricted paths for authenticated users
+const RESTRICTED_PATHS = [
+  "/login",
+  "/signup",
+  "/reset-password",
+  "/admin/login",
+  "/admin/reset-password",
+];
 
-  const routeConfig = getRouteConfig(path);
+// Helper function to validate JWT token
+const validateToken = async (token: string): Promise<User | null> => {
+  const userSecret = process.env.JWT_SECRET_USER;
+  const adminSecret = process.env.JWT_SECRET_ADMIN;
 
-  if (!routeConfig) {
-    return NextResponse.next(); // If route not found, proceed without blocking
+  if (!userSecret || !adminSecret) {
+    throw new Error("JWT secrets are not defined");
   }
 
-  const isAuthenticated = cookie ? await validateToken(cookie) : false;
+  try {
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(userSecret)
+    );
+    return payload as unknown as User;
+  } catch {
+    try {
+      const { payload } = await jwtVerify(
+        token,
+        new TextEncoder().encode(adminSecret)
+      );
+      return payload as unknown as User;
+    } catch {
+      return null;
+    }
+  }
+};
 
-  if (routeConfig.protected && !isAuthenticated) {
+// Middleware function
+export default async function middleware(
+  req: NextRequest
+): Promise<NextResponse> {
+  const path = req.nextUrl.pathname;
+  const token = req.cookies.get("token")?.value;
+
+  // Validate user based on token
+  const user = token ? await validateToken(token) : null;
+
+  if (user && RESTRICTED_PATHS.includes(path)) {
+    return NextResponse.redirect(new URL("/", req.nextUrl));
+  }
+
+  // Handle admin/user-specific paths
+  if (user && path.startsWith("/admin")) {
+    if (user.role === "admin") {
+      return NextResponse.next();
+    }
+    if (user.role === "user") {
+      return NextResponse.redirect(new URL("/unauthorized", req.nextUrl));
+    }
+  }
+
+  // Check if the path is protected and user is not authenticated
+  if (PROTECTED_ROUTES.includes(path) && !user) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  if (!routeConfig.protected && isAuthenticated && path !== "/dashboard") {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
-  }
-
+  // Allow access to all other routes
   return NextResponse.next();
 }
 

@@ -4,7 +4,7 @@ import { Virtual, Autoplay } from "swiper/modules";
 import { useRef } from "react";
 import SwiperCore from "swiper";
 
-import MemberCommentCard from "@/components/layout/home/memberCommentCard";
+import MemberCommentCard from "@/components/home/memberCommentCard";
 import SliderControl from "@/components/sliderControls";
 
 import "swiper/css";

@@ -7,7 +7,10 @@ export default function Newsletter() {
         <p className="text-2xl sm:text-3xl font-bold z-10 text-white">
           به خبرنامه ما بپیوندید
         </p>
-        <form action="#" className="flex rounded-2xl bg-[#7C6DE3] z-10 sm:w-[500px]">
+        <form
+          action="#"
+          className="flex rounded-2xl bg-[#7C6DE3] z-10 sm:w-[500px]"
+        >
           <input
             className="text-sm text-white placeholder:text-silver placeholder:text-xs sm:placeholder:text-sm bg-transparent py-4 pr-4 flex-1"
             type="text"

@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTransition } from "react";
 import z from "zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/context/authContext";
 import { LoginSchema } from "@/schemas";
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
+import { loginUser } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 type Errors = {
   email?: string;
@@ -22,7 +22,6 @@ type LoginFormProps = {
 };
 
 export default function LoginForm({ role }: LoginFormProps) {
-  const { isAuthenticated, loginUser, loginAdmin } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
@@ -31,12 +30,6 @@ export default function LoginForm({ role }: LoginFormProps) {
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {
@@ -64,20 +57,21 @@ export default function LoginForm({ role }: LoginFormProps) {
       startTransition(async () => {
         try {
           if (role === "user") {
-            await loginUser(email, password);
+            const res = await loginUser(email, password);
+            console.log(res);
           } else if (role === "admin") {
-            await loginAdmin(email, password); 
+            // await loginAdmin(email, password);
           } else {
             throw new Error("نقش نامعتبر است.");
           }
-
           setActionSuccess("ورود موفقیت‌آمیز بود!");
-        } catch (error: any) {
-          console.error("ورود ناموفق بود:", error);
-          setActionError(
-            error.response?.data?.message ||
-              "ورود ناموفق بود. لطفاً دوباره تلاش کنید."
-          );
+          router.push("/");
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            setActionError(error.message);
+          } else {
+            setActionError("خطا در ورود. لطفاً دوباره تلاش کنید.");
+          }
         }
       });
     }

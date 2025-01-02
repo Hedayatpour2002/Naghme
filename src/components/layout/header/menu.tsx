@@ -9,7 +9,7 @@ export default function Menu() {
     { title: "کتاب الکترونیکی", address: "/books" },
     { title: "کتاب صوتی", address: "/books" },
     { title: "جدیدترین ها", address: "/books" },
-    { title: "پرفروش ترین ها", address: "/books" },
+    { title: "پرفروش ترین ها", address: "/signup" },
   ];
   return (
     <>

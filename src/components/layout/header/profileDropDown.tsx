@@ -2,11 +2,7 @@ import Image from "next/image";
 import UserMenu from "./userMenu";
 import { useState } from "react";
 
-interface ProfileDropDownProps {
-  signOut: () => void;
-}
-
-export default function ProfileDropDown({ signOut }: ProfileDropDownProps) {
+export default function ProfileDropDown() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
 
@@ -16,9 +12,14 @@ export default function ProfileDropDown({ signOut }: ProfileDropDownProps) {
   };
 
   return (
-    <div className="w-14 h-14 z-50 bg-red relative flex items-center justify-center">
+    <div className="w-14 h-14 z-50  relative flex items-center justify-center">
       <button onClick={toggleMenu} className="rounded-xl">
-        <Image src={""} alt="" width={56} height={56} />
+        <Image
+          src="/images/userProfile/boy1.svg"
+          alt=""
+          width={56}
+          height={56}
+        />
       </button>
 
       {hasInteracted && (
@@ -27,7 +28,7 @@ export default function ProfileDropDown({ signOut }: ProfileDropDownProps) {
             isOpen ? "animate-fade-in-down" : "animate-fade-out-up"
           }`}
         >
-          <UserMenu signOut={signOut} />
+          <UserMenu />
         </div>
       )}
     </div>

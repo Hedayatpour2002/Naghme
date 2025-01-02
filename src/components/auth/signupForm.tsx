@@ -1,15 +1,14 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTransition } from "react";
 import Image from "next/image";
 import z from "zod";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/context/authContext";
 import { signupSchema } from "@/schemas";
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
+import { loginUser, registerUser } from "@/services/authService";
 
 type Errors = {
   email?: string;
@@ -29,14 +28,7 @@ export default function SignupForm() {
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const { isAuthenticated, register } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {
@@ -55,41 +47,34 @@ export default function SignupForm() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setActionError("");
-    setActionSuccess("");
-
     if (validateForm()) {
       startTransition(async () => {
         try {
-          await register(email, password, username, phoneNumber);
+          const res = await registerUser(
+            email,
+            password,
+            username,
+            phoneNumber
+          );
+          console.log("Register was successful, RESPONSE:", res);
 
-          setActionSuccess("ثبت‌نام موفقیت‌آمیز بود!");
-        } catch (error: any) {
-          if (error.response) {
-            const { status, data } = error.response;
+          const loginResponse = await loginUser(email, password);
+          console.log("Login was successful, RESPONSE:", loginResponse);
 
-            if (status === 400) {
-              setActionError(data.message || "خطای اعتبارسنجی در ثبت‌نام.");
-            }
-            else if (status === 500) {
-              setActionError(
-                data.message || "خطای سرور. لطفاً دوباره تلاش کنید."
-              );
-            }
-            else {
-              setActionError(
-                "خطای ناشناخته در ثبت‌نام. لطفاً دوباره تلاش کنید."
-              );
-            }
+          setActionSuccess("ثبت‌نام و ورود موفقیت‌آمیز بود!");
+          router.push("/");
+        } catch (error) {
+          if (error instanceof Error) {
+            setActionError(error.message);
           } else {
-            setActionError("مشکلی در ارتباط با سرور رخ داده است.");
+            setActionError("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
           }
         }
       });
     }
-  };
+  }
 
   return (
     <>

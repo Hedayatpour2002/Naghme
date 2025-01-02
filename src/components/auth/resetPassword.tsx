@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { z } from "zod";
 
 import OTPInput from "@/components/auth/OTPInput";
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
-import { useAuth } from "@/context/authContext";
 import { sendOTPSchema } from "@/schemas";
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
@@ -27,15 +25,6 @@ export default function ResetPassword() {
   const [email, setEmail] = useState<string>("");
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
-
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
 
   const validateForm = (): boolean => {
     try {

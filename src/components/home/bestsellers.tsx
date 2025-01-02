@@ -1,4 +1,4 @@
-import BestsellersSlider from "@/components/layout/home/bestsellersSlider";
+import BestsellersSlider from "@/components/home/bestsellersSlider";
 
 export default function Bestsellers() {
   return (
