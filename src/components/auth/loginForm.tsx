@@ -170,9 +170,11 @@ export default function LoginForm({ role }: LoginFormProps) {
           )}
         </div>
 
-        <Link href="reset-password" className="pr-6 text-sm">
-          گذرواژه خود را فراموش کرده اید؟
-        </Link>
+        {role === "user" && (
+          <Link href="reset-password" className="pr-6 text-sm">
+            گذرواژه خود را فراموش کرده اید؟
+          </Link>
+        )}
 
         <div className="min-h-10">
           {actionError && <FormError message={actionError} />}
