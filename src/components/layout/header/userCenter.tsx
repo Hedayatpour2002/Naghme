@@ -4,12 +4,13 @@ import Image from "next/image";
 import AuthButtons from "@/components/layout/header/authButtons";
 import ProfileDropDown from "@/components/layout/header/profileDropDown";
 import { useEffect, useState } from "react";
+import getCookie from "@/utils/getCookie";
 
 export default function UserCenter() {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = getCookie("token");
     setAuthenticated(!!token);
   }, []);
 

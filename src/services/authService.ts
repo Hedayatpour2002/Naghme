@@ -63,8 +63,6 @@ export async function loginUser(email: string, password: string) {
         if (response.data.token) {
           const token = response.data.token;
 
-          localStorage.setItem("token", token);
-
           apiClient.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${token}`;
@@ -124,8 +122,6 @@ export async function loginAdmin(email: string, password: string) {
       case 200:
         if (response.data.token) {
           const token = response.data.token;
-
-          localStorage.setItem("token", token);
 
           apiClient.defaults.headers.common[
             "Authorization"
