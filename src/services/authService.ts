@@ -114,7 +114,7 @@ export async function loginUser(email: string, password: string) {
 
 export async function loginAdmin(email: string, password: string) {
   try {
-    const response = await apiClient.get("/iam/users/login", {
+    const response = await apiClient.get("/iam/admin/login-admin", {
       params: { email, password },
     });
 

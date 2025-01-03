@@ -9,7 +9,7 @@ import Link from "next/link";
 import { LoginSchema } from "@/schemas";
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
-import { loginUser } from "@/services/authService";
+import { loginAdmin, loginUser } from "@/services/authService";
 import { useRouter } from "next/navigation";
 
 type Errors = {
@@ -60,7 +60,7 @@ export default function LoginForm({ role }: LoginFormProps) {
             const res = await loginUser(email, password);
             console.log(res);
           } else if (role === "admin") {
-            // await loginAdmin(email, password);
+            await loginAdmin(email, password);
           } else {
             throw new Error("نقش نامعتبر است.");
           }
