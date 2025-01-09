@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Buy_Like_Buttons() {
   return (
-    <div className="flex gap-9 justify-between">
+    <div className="flex gap-4 justify-between">
       <button className="w-16 h-14 border border-silver rounded-md flex items-center justify-center">
         <svg
           width="29"

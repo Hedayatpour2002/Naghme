@@ -3,8 +3,10 @@ import Buy_Like_Buttons from "@/components/Buy_Like_Buttons";
 
 export default function BookCard() {
   return (
-    <div className="flex rounded-2xl border border-light-ligth-purple shadow-md p-3 gap-3 relative overflow-hidden">
-      <p className="absolute top-0 right-0 bg-dark-red text-white p-2 shadow-2xl rounded-bl-2xl rounded-tr-2xl text-xs font-semibold">فروش ویژه</p>
+    <div className="flex rounded-2xl border border-light-ligth-purple shadow-md p-2 gap-3 relative overflow-hidden">
+      <p className="absolute top-0 right-0 bg-dark-red text-white p-2 shadow-2xl rounded-bl-2xl rounded-tr-2xl text-xs font-semibold">
+        فروش ویژه
+      </p>
       {/* @TODO */}
       <Image
         src={"/sample/home-bestsellers/placeholder-0.png"}
@@ -34,21 +36,19 @@ export default function BookCard() {
             <span className="w-1 h-1 bg-light-purple rounded-full"></span>
             {/* @TODO */}
             <div className="flex gap-2.5 items-center">
+              <span className="text-midnight-blue text-xs sm:text-sm font-semibold flex gap-1 text-center leading-none">
+                4.1
+              </span>
               <Image
                 src={"/icon/full-star.svg"}
                 width={19}
                 height={17}
                 alt="ستاره"
               />
-
-              <p className="text-midnight-blue text-xs sm:text-sm font-semibold flex gap-1 text-center leading-none">
-                <span>4.1</span>
-                <span>(166 نظر)</span>
-              </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 ">
+        <div className="flex items-center justify-end gap-1 ">
           <p className="flex gap-1 items-center flex-grow">
             <span className="bg-dark-red py-0.5 px-2 text-sm font-bold text-white rounded-md flex items-center justify-center">
               <span className="relative -bottom-0.5">90%</span>
