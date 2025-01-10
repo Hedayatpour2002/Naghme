@@ -214,7 +214,7 @@ export default function ResetPassword() {
 
           <button
             type="submit"
-            className="bg-dark-purple text-white rounded-full py-3 px-6 hover:opacity-90 text-center"
+            className="bg-dark-purple text-white rounded-full py-3 px-6 text-center"
             disabled={isPending}
           >
             دریافت کد
@@ -235,7 +235,7 @@ export default function ResetPassword() {
           <OTPInput key={otpKey} length={4} onComplete={handleOtp} />
           <button
             onClick={handleResendCode}
-            className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 hover:opacity-90 text-center"
+            className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 text-center"
           >
             ارسال دوباره کد
           </button>
@@ -244,7 +244,7 @@ export default function ResetPassword() {
 
           <button
             onClick={handleEditPhoneNumber}
-            className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 hover:opacity-90 text-center"
+            className="text-dark-purple border border-dark-purple rounded-full py-3 px-6 text-center"
           >
             ویرایش شماره
           </button>

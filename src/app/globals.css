@@ -78,6 +78,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+button {
+  @apply hover:opacity-90;
+}
+
 @keyframes fade-in-down {
   from {
     opacity: 0;

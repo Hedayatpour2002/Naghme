@@ -244,7 +244,7 @@ export default function SignupForm() {
         </div>
         <button
           type="submit"
-          className="bg-dark-purple text-white rounded-full py-3 px-24 self-center hover:opacity-90"
+          className="bg-dark-purple text-white rounded-full py-3 px-24 self-center"
           disabled={isPending}
         >
           ثبت نام

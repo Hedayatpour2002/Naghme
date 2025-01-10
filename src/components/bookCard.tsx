@@ -1,7 +1,68 @@
+"use client";
+
 import Image from "next/image";
-import Buy_Like_Buttons from "@/components/Buy_Like_Buttons";
+import { useEffect, useState } from "react";
+import getUser from "@/utils/getUser";
+import ProductActionButtons from "./ProductActionButtons";
+import { useStore } from "@/stores/useStore";
+
+interface User {
+  user_id: number;
+  user_name: string;
+  email: string;
+  contact: boolean;
+  role: string;
+  iat: number;
+  exp: number;
+}
 
 export default function BookCard() {
+  const [user, setUser] = useState<User | null>(null);
+
+  const {
+    favorites,
+    cart,
+    addToFavorites,
+    removeFromFavorites,
+    addToCart,
+    removeFromCart,
+  } = useStore();
+
+  const productId = "1";
+  const isInCart = cart.includes(productId);
+  const isLiked = favorites.includes(productId);
+
+  useEffect(() => {
+    const userData = getUser();
+    setUser(userData);
+  }, []);
+
+  const handleBuy = () => {
+    if (isInCart) {
+      removeFromCart(productId);
+    } else {
+      addToCart(productId);
+    }
+  };
+
+  const handleLike = () => {
+    if (isLiked) {
+      removeFromFavorites(productId);
+    } else {
+      addToFavorites(productId);
+    }
+  };
+
+  const handleDelete = () => {
+    console.log("Delete product with ID:", productId);
+    // API call to delete the product
+  };
+
+  const handleEdit = () => {
+    console.log("Edit product with ID:", productId);
+    // Navigation to edit page or open modal
+  };
+
   return (
     <div className="flex rounded-2xl border border-light-ligth-purple shadow-md p-2 gap-3 relative overflow-hidden">
       <p className="absolute top-0 right-0 bg-dark-red text-white p-2 shadow-2xl rounded-bl-2xl rounded-tr-2xl text-xs font-semibold">
@@ -60,7 +121,15 @@ export default function BookCard() {
             <span className="font-semibold text-sm">تومان</span>
           </p>
         </div>
-        <Buy_Like_Buttons />
+        <ProductActionButtons
+          userRole={user?.role}
+          isInCart={isInCart}
+          isLiked={isLiked}
+          handleBuy={handleBuy}
+          handleLike={handleLike}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+        />
       </div>
     </div>
   );

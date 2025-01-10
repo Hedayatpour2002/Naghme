@@ -156,7 +156,7 @@ export default function ResetPasswordForm({
 
         <button
           type="submit"
-          className="bg-dark-purple text-white rounded-full py-3 px-6 hover:opacity-90 text-center"
+          className="bg-dark-purple text-white rounded-full py-3 px-6 text-center"
         >
           تایید
         </button>
