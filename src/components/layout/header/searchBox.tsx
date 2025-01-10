@@ -84,7 +84,7 @@ export default function SearchBox() {
         </button>
       </div>
 
-      {menuOpen && <Menu />}
+      {menuOpen && <Menu onClose={() => setMenuOpen(false)} />}
     </div>
   );
 }
