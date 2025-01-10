@@ -1,7 +1,17 @@
 import Image from "next/image";
 import React from "react";
 
-const ProductActionButtons = ({
+interface BookActionButtonsProps {
+  userRole?: string;
+  isInCart: boolean;
+  isLiked: boolean;
+  handleBuy: () => void;
+  handleLike: () => void;
+  handleDelete: () => void;
+  handleEdit: () => void;
+}
+
+const BookActionButtons: React.FC<BookActionButtonsProps> = ({
   userRole,
   isInCart,
   isLiked,
@@ -12,42 +22,7 @@ const ProductActionButtons = ({
 }) => {
   return (
     <div className="flex gap-4 justify-between">
-      {userRole === "user" ? (
-        <button
-          className={`transition w-16 h-14 border border-silver rounded-md flex items-center justify-center ${
-            isLiked && "bg-light-pink border-light-pink"
-          }`}
-          onClick={handleLike}
-        >
-          {isLiked ? (
-            <svg
-              width="29"
-              height="24"
-              viewBox="0 0 29 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M25.7822 1.73456C22.7854 -0.695378 18.3285 -0.258301 15.5777 2.44221L14.5004 3.49848L13.4231 2.44221C10.6778 -0.258301 6.2154 -0.695378 3.21859 1.73456C-0.215722 4.52353 -0.396187 9.5291 2.67719 12.5522L13.259 22.9484C13.9426 23.6196 15.0527 23.6196 15.7363 22.9484L26.3181 12.5522C29.397 9.5291 29.2165 4.52353 25.7822 1.73456V1.73456Z"
-                fill="#DE283B"
-              />
-            </svg>
-          ) : (
-            <svg
-              width="29"
-              height="24"
-              viewBox="0 0 29 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M25.7822 1.73456C22.7854 -0.695378 18.3285 -0.258301 15.5777 2.44221L14.5004 3.49848L13.4231 2.44221C10.6778 -0.258301 6.2154 -0.695378 3.21859 1.73456C-0.215722 4.52353 -0.396187 9.5291 2.67719 12.5522L13.259 22.9484C13.9426 23.6196 15.0527 23.6196 15.7363 22.9484L26.3181 12.5522C29.397 9.5291 29.2165 4.52353 25.7822 1.73456V1.73456Z"
-                fill="#ACACAC"
-              />
-            </svg>
-          )}
-        </button>
-      ) : (
+      {userRole === "admin" ? (
         <button
           onClick={handleDelete}
           className="text-dark-purple flex items-center justify-center gap-2 px-2 rounded-lg border border-light-purple py-4 flex-grow font-semibold"
@@ -87,41 +62,48 @@ const ProductActionButtons = ({
           </svg>
           حذف
         </button>
+      ) : (
+        <button
+          className={`transition w-16 h-14 border border-silver rounded-md flex items-center justify-center ${
+            isLiked && "bg-light-pink border-light-pink"
+          }`}
+          onClick={handleLike}
+        >
+          {isLiked ? (
+            <svg
+              width="29"
+              height="24"
+              viewBox="0 0 29 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M25.7822 1.73456C22.7854 -0.695378 18.3285 -0.258301 15.5777 2.44221L14.5004 3.49848L13.4231 2.44221C10.6778 -0.258301 6.2154 -0.695378 3.21859 1.73456C-0.215722 4.52353 -0.396187 9.5291 2.67719 12.5522L13.259 22.9484C13.9426 23.6196 15.0527 23.6196 15.7363 22.9484L26.3181 12.5522C29.397 9.5291 29.2165 4.52353 25.7822 1.73456V1.73456Z"
+                fill="#DE283B"
+              />
+            </svg>
+          ) : (
+            <svg
+              width="29"
+              height="24"
+              viewBox="0 0 29 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M25.7822 1.73456C22.7854 -0.695378 18.3285 -0.258301 15.5777 2.44221L14.5004 3.49848L13.4231 2.44221C10.6778 -0.258301 6.2154 -0.695378 3.21859 1.73456C-0.215722 4.52353 -0.396187 9.5291 2.67719 12.5522L13.259 22.9484C13.9426 23.6196 15.0527 23.6196 15.7363 22.9484L26.3181 12.5522C29.397 9.5291 29.2165 4.52353 25.7822 1.73456V1.73456Z"
+                fill="#ACACAC"
+              />
+            </svg>
+          )}
+        </button>
       )}
+
       <button
         className={`transition flex bg-dark-purple rounded-lg px-2 items-center justify-center gap-2 flex-grow font-semibold text-white`}
-        onClick={userRole === "user" ? handleBuy : handleEdit}
+        onClick={userRole === "admin" ? handleEdit : handleBuy}
       >
-        {userRole === "user" ? (
-          isInCart ? (
-            <>
-              <svg
-                width="25"
-                height="25"
-                viewBox="0 0 25 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 8.77686V6.77686H15.5V8.77686H9.5ZM7.5 22.7769C6.95 22.7769 6.47917 22.581 6.0875 22.1894C5.69583 21.7977 5.5 21.3269 5.5 20.7769C5.5 20.2269 5.69583 19.756 6.0875 19.3644C6.47917 18.9727 6.95 18.7769 7.5 18.7769C8.05 18.7769 8.52083 18.9727 8.9125 19.3644C9.30417 19.756 9.5 20.2269 9.5 20.7769C9.5 21.3269 9.30417 21.7977 8.9125 22.1894C8.52083 22.581 8.05 22.7769 7.5 22.7769ZM17.5 22.7769C16.95 22.7769 16.4792 22.581 16.0875 22.1894C15.6958 21.7977 15.5 21.3269 15.5 20.7769C15.5 20.2269 15.6958 19.756 16.0875 19.3644C16.4792 18.9727 16.95 18.7769 17.5 18.7769C18.05 18.7769 18.5208 18.9727 18.9125 19.3644C19.3042 19.756 19.5 20.2269 19.5 20.7769C19.5 21.3269 19.3042 21.7977 18.9125 22.1894C18.5208 22.581 18.05 22.7769 17.5 22.7769ZM1.5 4.77686V2.77686H4.775L9.025 11.7769H16.025L19.925 4.77686H22.2L17.8 12.7269C17.6167 13.0602 17.3708 13.3185 17.0625 13.5019C16.7542 13.6852 16.4167 13.7769 16.05 13.7769H8.6L7.5 15.7769H19.5V17.7769H7.5C6.75 17.7769 6.17917 17.4519 5.7875 16.8019C5.39583 16.1519 5.38333 15.4935 5.75 14.8269L7.1 12.3769L3.5 4.77686H1.5Z"
-                  fill="white"
-                />
-              </svg>
-
-              <span>حذف</span>
-            </>
-          ) : (
-            <>
-              <Image
-                src={"/icon/addToCart.svg"}
-                alt="خرید"
-                width={24}
-                height={24}
-              />
-              <span>خرید</span>
-            </>
-          )
-        ) : (
+        {userRole === "admin" ? (
           <>
             <svg
               width="18"
@@ -137,10 +119,37 @@ const ProductActionButtons = ({
             </svg>
             <span>ویرایش</span>
           </>
+        ) : isInCart ? (
+          <>
+            <svg
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.5 8.77686V6.77686H15.5V8.77686H9.5ZM7.5 22.7769C6.95 22.7769 6.47917 22.581 6.0875 22.1894C5.69583 21.7977 5.5 21.3269 5.5 20.7769C5.5 20.2269 5.69583 19.756 6.0875 19.3644C6.47917 18.9727 6.95 18.7769 7.5 18.7769C8.05 18.7769 8.52083 18.9727 8.9125 19.3644C9.30417 19.756 9.5 20.2269 9.5 20.7769C9.5 21.3269 9.30417 21.7977 8.9125 22.1894C8.52083 22.581 8.05 22.7769 7.5 22.7769ZM17.5 22.7769C16.95 22.7769 16.4792 22.581 16.0875 22.1894C15.6958 21.7977 15.5 21.3269 15.5 20.7769C15.5 20.2269 15.6958 19.756 16.0875 19.3644C16.4792 18.9727 16.95 18.7769 17.5 18.7769C18.05 18.7769 18.5208 18.9727 18.9125 19.3644C19.3042 19.756 19.5 20.2269 19.5 20.7769C19.5 21.3269 19.3042 21.7977 18.9125 22.1894C18.5208 22.581 18.05 22.7769 17.5 22.7769ZM1.5 4.77686V2.77686H4.775L9.025 11.7769H16.025L19.925 4.77686H22.2L17.8 12.7269C17.6167 13.0602 17.3708 13.3185 17.0625 13.5019C16.7542 13.6852 16.4167 13.7769 16.05 13.7769H8.6L7.5 15.7769H19.5V17.7769H7.5C6.75 17.7769 6.17917 17.4519 5.7875 16.8019C5.39583 16.1519 5.38333 15.4935 5.75 14.8269L7.1 12.3769L3.5 4.77686H1.5Z"
+                fill="white"
+              />
+            </svg>
+
+            <span>حذف</span>
+          </>
+        ) : (
+          <>
+            <Image
+              src={"/icon/addToCart.svg"}
+              alt="خرید"
+              width={24}
+              height={24}
+            />
+            <span>خرید</span>
+          </>
         )}
       </button>
     </div>
   );
 };
 
-export default ProductActionButtons;
+export default BookActionButtons;

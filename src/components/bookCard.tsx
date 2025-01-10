@@ -1,23 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import getUser from "@/utils/getUser";
-import ProductActionButtons from "./ProductActionButtons";
+import BookActionButtons from "@/components/BookActionButtons";
 import { useStore } from "@/stores/useStore";
-
-interface User {
-  user_id: number;
-  user_name: string;
-  email: string;
-  contact: boolean;
-  role: string;
-  iat: number;
-  exp: number;
-}
+import useUserStore from "@/stores/userStore";
 
 export default function BookCard() {
-  const [user, setUser] = useState<User | null>(null);
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
   const {
     favorites,
@@ -35,7 +27,7 @@ export default function BookCard() {
   useEffect(() => {
     const userData = getUser();
     setUser(userData);
-  }, []);
+  }, [setUser]);
 
   const handleBuy = () => {
     if (isInCart) {
@@ -121,7 +113,7 @@ export default function BookCard() {
             <span className="font-semibold text-sm">تومان</span>
           </p>
         </div>
-        <ProductActionButtons
+        <BookActionButtons
           userRole={user?.role}
           isInCart={isInCart}
           isLiked={isLiked}

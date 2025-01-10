@@ -1,33 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Link from "next/link";
 
 import AuthButtons from "@/components/layout/header/authButtons";
 import ProfileDropDown from "@/components/layout/header/profileDropDown";
 import getUser from "@/utils/getUser";
 import { useStore } from "@/stores/useStore";
-import Link from "next/link";
-
-interface User {
-  user_id: number;
-  user_name: string;
-  email: string;
-  contact: boolean;
-  role: string;
-  iat: number;
-  exp: number;
-}
+import useUserStore from "@/stores/userStore";
 
 export default function UserCenter() {
-  const [user, setUser] = useState<User | null>(null);
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
   const { favorites, cart } = useStore();
 
   useEffect(() => {
     const userData = getUser();
     setUser(userData);
-  }, []);
+  }, [setUser]);
 
   return (
     <>
