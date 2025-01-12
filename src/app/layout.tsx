@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="font-shabnam text-dark-blue h-full">{children}</body>
+      <body className="font-shabnam text-dark-blue min-h-screen flex flex-col">
+        {children}
+      </body>
     </html>
   );
 }

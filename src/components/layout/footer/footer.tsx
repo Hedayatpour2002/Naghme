@@ -5,7 +5,7 @@ import FooterNav from "./footerNav";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-light-light-silver shadow-2xl">
+    <footer className="border-t border-light-light-silver shadow-2xl justify-self-end">
       <div className="container flex flex-col gap-4 mt-8 pb-4">
         <section className="flex flex-col lg:flex-row gap-8 lg:justify-between">
           <div className="flex flex-col items-center gap-4">

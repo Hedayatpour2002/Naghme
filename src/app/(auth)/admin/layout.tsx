@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Footer from "@/components/layout/footer/footer";
 
-export default function Layout({
+export default function AdminAuthLayout({
   children,
 }: {
   children: React.ReactNode;

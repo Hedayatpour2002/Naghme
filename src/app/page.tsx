@@ -6,11 +6,11 @@ import Newsletter from "@/components/home/newsletter";
 import Footer from "@/components/layout/footer/footer";
 import Header from "@/components/layout/header/header";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="flex-grow">
         <Hero />
         <Bestsellers />
         <FeaturedPicks />

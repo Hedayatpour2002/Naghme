@@ -8,7 +8,7 @@ export default function NotFoundPage() {
   return (
     <>
       <Header />
-      <main className="flex items-center justify-center flex-col gap-8 pb-16 text-center">
+      <main className="flex items-center justify-center flex-col gap-8 pb-16 text-center flex-grow">
         <Image
           src={"/images/books_404.svg"}
           alt="books"

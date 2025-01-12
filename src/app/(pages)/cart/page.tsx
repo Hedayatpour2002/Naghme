@@ -1,6 +1,5 @@
+import Cart from "@/components/cart/cart";
 
-export default function UserCart() {
-  return (
-    <div>UserCart</div>
-  )
+export default function CartPage() {
+  return <Cart />;
 }

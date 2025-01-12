@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Footer from "@/components/layout/footer/footer";
 
-export default function AuthLayout({
+export default function UserAuthLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -1,4 +1,3 @@
-// stores/useStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -9,11 +8,13 @@ interface StoreState {
   removeFromFavorites: (productId: string) => void;
   addToCart: (productId: string) => void;
   removeFromCart: (productId: string) => void;
+  getCartItems: () => string[];
+  getFavoriteItems: () => string[];
 }
 
 export const useStore = create<StoreState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       favorites: [],
       cart: [],
       addToFavorites: (productId) =>
@@ -38,6 +39,8 @@ export const useStore = create<StoreState>()(
         set((state) => ({
           cart: state.cart.filter((id) => id !== productId),
         })),
+      getCartItems: () => get().cart,
+      getFavoriteItems: () => get().favorites,
     }),
     {
       name: "user-store",

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 
 const breadcrumbLabels: { [key: string]: string } = {
   books: "کتاب ها",
+  favorites: "مورد علاقه ها",
+  cart: "سبد خرید",
   ebooks: "کتاب های الکترونیکی",
   audiobooks: "کتاب های صوتی",
 };
