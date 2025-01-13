@@ -1,6 +1,5 @@
+import MyBooks from "@/components/my-books/myBooks";
 
 export default function MyBookPage() {
-  return (
-    <div>MyBookPage</div>
-  )
+  return <MyBooks />;
 }

@@ -14,7 +14,7 @@ interface User {
 }
 
 // List of protected routes
-const PROTECTED_ROUTES = ["/dashboard", "/settings", "/admin"];
+const PROTECTED_ROUTES = ["/dashboard", "/settings", "/my-books", "/admin"];
 // Handle restricted paths for authenticated users
 const RESTRICTED_PATHS = [
   "/login",
