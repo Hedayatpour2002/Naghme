@@ -15,9 +15,6 @@ export default function FormSuccess({ message }: FormSuccessProps) {
         alt="success icon"
       />
       <p>{message}</p>
-      {/* <div className="w-6 h-6 flex items-end justify-center leading-none bg-red text-center">
-        1
-      </div> */}
     </div>
   );
 }

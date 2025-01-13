@@ -1,7 +1,9 @@
 "use client";
+// import Image from "next/image";
+
 import { useStore } from "@/stores/useStore";
 import BookCard from "@/components/bookCard";
-// import Image from "next/image";
+import FavoritesTitle from "@/components/favorites/favoritesTitle";
 
 export default function Favorites() {
   const { getFavoriteItems } = useStore();
@@ -10,14 +12,8 @@ export default function Favorites() {
 
   return (
     <>
-      <div className="flex flex-col gap-1 py-4">
-        <h2 className="font-semibold text-3xl">کتاب های مورد علاقه</h2>
-        <p className="text-dark-blue/60 text-sm py-2">
-          در این بخش، کتاب‌هایی که توسط شما لایک شده‌اند و مورد توجه‌تان قرار
-          گرفته‌اند، نمایش داده می‌شوند.
-        </p>
-      </div>
-      <div className="flex flex-col md:flex-row md:items-start pb-9">
+      <FavoritesTitle />
+      <div className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-4 justify-center pb-9">
         {favoriteIds.length ? (
           favoriteIds.map((id) => <BookCard key={id} />)
         ) : (
