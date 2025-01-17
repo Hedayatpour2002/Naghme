@@ -4,10 +4,8 @@ import { useState } from "react";
 
 export default function ProfileDropDown() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
 
   const toggleMenu = () => {
-    setHasInteracted(true);
     setIsOpen((prev) => !prev);
   };
 
@@ -22,15 +20,13 @@ export default function ProfileDropDown() {
         />
       </button>
 
-      {hasInteracted && (
-        <div
-          className={`absolute left-0 top-full ${
-            isOpen ? "animate-fade-in-down" : "animate-fade-out-up"
-          }`}
-        >
-          <UserMenu />
-        </div>
-      )}
+      <div
+        className={`absolute left-0 top-full ${
+          isOpen ? "animate-fade-in-down" : "animate-fade-out-up"
+        }`}
+      >
+        <UserMenu clickHandler={toggleMenu} />
+      </div>
     </div>
   );
 }

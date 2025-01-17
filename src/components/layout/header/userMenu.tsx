@@ -3,7 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function UserMenu() {
+interface userMenuProps {
+  clickHandler: () => void;
+}
+
+export default function UserMenu({ clickHandler }: userMenuProps) {
   const router = useRouter();
 
   const menuItem = [
@@ -22,7 +26,7 @@ export default function UserMenu() {
   return (
     <ul className="flex flex-col gap-7 p-8 font-bold text-sm text-light-blue bg-white border-light-ligth-purple shadow-xl min-w-[227px] rounded-2xl">
       {menuItem.map((item, index) => (
-        <li key={index}>
+        <li key={index} onClick={clickHandler}>
           <Link href={item.address} className="flex gap-2 items-center">
             <Image src={item.icon} alt="" width={24} height={24} />
             <span>{item.title}</span>
