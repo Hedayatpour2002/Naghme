@@ -7,7 +7,7 @@ interface FormErrorProps {
 export default function FormError({ message }: FormErrorProps) {
   if (!message) return null;
   return (
-    <div className="text-dark-red pr-6 bg-dark-red/10 rounded-xl py-3 flex gap-2 items-center font-bold ">
+    <div className="text-dark-red px-6 bg-dark-red/10 rounded-xl py-3 flex gap-2 items-center font-bold ">
       <Image
         src={"/icon/alert-error.svg"}
         width={20}

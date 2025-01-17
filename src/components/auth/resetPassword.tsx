@@ -54,7 +54,7 @@ export default function ResetPassword() {
           const response = await sendOtp(email, phoneNumber);
 
           if (response.result) {
-            // setActionSuccess("کد OTP با موفقیت ارسال شد.");
+            setActionSuccess("کد OTP با موفقیت ارسال شد.");
             console.log("کد OTP با موفقیت ارسال شد.");
             setIsOtpSent(true);
           } else {

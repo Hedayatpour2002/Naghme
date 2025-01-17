@@ -8,6 +8,7 @@ const breadcrumbLabels: { [key: string]: string } = {
   favorites: "علاقه‌مندی ها",
   cart: "سبد خرید",
   "my-books": "کتاب های من",
+  settings: "تنظیمات",
   ebooks: "کتاب های الکترونیکی",
   audiobooks: "کتاب های صوتی",
 };

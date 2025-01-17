@@ -88,3 +88,44 @@ export const resetPasswordSchema = z
       });
     }
   });
+
+export const changePasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(1, {
+        message: "پر کردن این فیلد الزامی است!",
+      })
+      .trim(),
+    newPassword: z
+      .string()
+      .regex(/[0-9]/, { message: "رمز عبور باید حداقل شامل یک عدد باشد!" })
+      .regex(/[a-zA-Z]/, {
+        message: "رمز عبور باید حداقل شامل یک حرف انگلیسی باشد!",
+      })
+      .min(8, { message: "رمز عبور باید حداقل شامل 8 حرف باشد!" })
+      .trim(),
+    confirmPassword: z.string(),
+    otp: z
+      .string()
+      .length(4, {
+        message: "لطفا کد یکبار مصرف را وارد نمایید!",
+      })
+      .trim(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "رمز عبور جدید و تکرار آن باید یکسان باشند!",
+        path: ["confirmPassword"],
+      });
+    }
+    if (data.confirmPassword === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "پر کردن این فیلد الزامی است!",
+        path: ["confirmPassword"],
+      });
+    }
+  });
