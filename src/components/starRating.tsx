@@ -12,7 +12,7 @@ export function StarRating({ rating }: StarRatingProps) {
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
-    <div className="flex">
+    <div className="flex gap-2">
       {Array(fullStars)
         .fill(0)
         .map((_, i) => (

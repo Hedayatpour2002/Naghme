@@ -6,6 +6,7 @@ import getUser from "@/utils/getUser";
 import BookActionButtons from "@/components/BookActionButtons";
 import { useStore } from "@/stores/useStore";
 import useUserStore from "@/stores/userStore";
+import Link from "next/link";
 
 export default function BookCard() {
   const user = useUserStore((state) => state.user);
@@ -61,13 +62,15 @@ export default function BookCard() {
         فروش ویژه
       </p>
       {/* @TODO */}
-      <Image
-        src={"/sample/home-bestsellers/placeholder-0.png"}
-        width={133}
-        height={222}
-        alt=""
-        className="object-cover rounded-[20px]"
-      />
+      <Link href={`books/1`} className="flex">
+        <Image
+          src={"/sample/home-bestsellers/placeholder-0.png"}
+          width={133}
+          height={222}
+          alt=""
+          className="object-cover rounded-[20px]"
+        />
+      </Link>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-1 justify-between">
@@ -81,8 +84,9 @@ export default function BookCard() {
             </span>
           </div>
           {/* @TODO */}
-          <h2 className="font-semibold">صد سال تنهایی</h2>
-
+          <Link href={`books/1`}>
+            <h2 className="font-semibold">صد سال تنهایی</h2>
+          </Link>
           <div className="flex items-center justify-between gap-3">
             {/* @TODO */}
             <span className="text-light-blue text-xs">گابریل گارسیا مارکز</span>
@@ -113,15 +117,17 @@ export default function BookCard() {
             <span className="font-semibold text-sm">تومان</span>
           </p>
         </div>
-        <BookActionButtons
-          userRole={user?.role}
-          isInCart={isInCart}
-          isLiked={isLiked}
-          handleBuy={handleBuy}
-          handleLike={handleLike}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-        />
+        <div className="flex gap-4 justify-between">
+          <BookActionButtons
+            userRole={user?.role}
+            isInCart={isInCart}
+            isLiked={isLiked}
+            handleBuy={handleBuy}
+            handleLike={handleLike}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+          />
+        </div>
       </div>
     </div>
   );

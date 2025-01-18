@@ -21,7 +21,7 @@ const BookActionButtons: React.FC<BookActionButtonsProps> = ({
   handleEdit,
 }) => {
   return (
-    <div className="flex gap-4 justify-between">
+    <>
       {userRole === "admin" ? (
         <button
           onClick={handleDelete}
@@ -148,7 +148,7 @@ const BookActionButtons: React.FC<BookActionButtonsProps> = ({
           </>
         )}
       </button>
-    </div>
+    </>
   );
 };
 
