@@ -1,58 +1,10 @@
 import Image from "next/image";
 import { StarRating } from "../starRating";
 import BookActionButtons from "../BookActionButtons";
-import useUserStore from "@/stores/userStore";
-import { useStore } from "@/stores/useStore";
-import { useEffect } from "react";
-import getUser from "@/utils/getUser";
 
 export default function BookHero() {
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
-
-  const {
-    favorites,
-    cart,
-    addToFavorites,
-    removeFromFavorites,
-    addToCart,
-    removeFromCart,
-  } = useStore();
-
   const productId = "1";
-  const isInCart = cart.includes(productId);
-  const isLiked = favorites.includes(productId);
 
-  useEffect(() => {
-    const userData = getUser();
-    setUser(userData);
-  }, [setUser]);
-
-  const handleBuy = () => {
-    if (isInCart) {
-      removeFromCart(productId);
-    } else {
-      addToCart(productId);
-    }
-  };
-
-  const handleLike = () => {
-    if (isLiked) {
-      removeFromFavorites(productId);
-    } else {
-      addToFavorites(productId);
-    }
-  };
-
-  const handleDelete = () => {
-    console.log("Delete product with ID:", productId);
-    // API call to delete the product
-  };
-
-  const handleEdit = () => {
-    console.log("Edit product with ID:", productId);
-    // Navigation to edit page or open modal
-  };
   return (
     <section className="flex flex-col gap-16 items-center justify-center lg:flex-row-reverse pb-9 lg:pt-9">
       <div className="w-fit relative top-9 flex-shrink-0">
@@ -127,15 +79,7 @@ export default function BookHero() {
           </p>
         </div>
         <div className="flex flex-row-reverse justify-between self-start min-w-64 gap-8">
-          <BookActionButtons
-            userRole={user?.role}
-            isInCart={isInCart}
-            isLiked={isLiked}
-            handleBuy={handleBuy}
-            handleLike={handleLike}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-          />
+          <BookActionButtons productId={productId} />
         </div>
       </section>
     </section>

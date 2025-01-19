@@ -1,30 +1,85 @@
+"use client";
+import useModalStore from "@/stores/useModalStore";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
+import EditBookForm from "./editBookForm";
+import useUserStore from "@/stores/userStore";
+import { useStore } from "@/stores/useStore";
+import getUser from "@/utils/getUser";
 
 interface BookActionButtonsProps {
-  userRole?: string;
-  isInCart: boolean;
-  isLiked: boolean;
-  handleBuy: () => void;
-  handleLike: () => void;
-  handleDelete: () => void;
-  handleEdit: () => void;
+  productId: string;
 }
 
-const BookActionButtons: React.FC<BookActionButtonsProps> = ({
-  userRole,
-  isInCart,
-  isLiked,
-  handleBuy,
-  handleLike,
-  handleDelete,
-  handleEdit,
-}) => {
+export default function BookActionButtons({
+  productId,
+}: BookActionButtonsProps) {
+  const openModal = useModalStore((state) => state.openModal);
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  const {
+    favorites,
+    cart,
+    addToFavorites,
+    removeFromFavorites,
+    addToCart,
+    removeFromCart,
+  } = useStore();
+
+  const isInCart = cart.includes(productId);
+  const isLiked = favorites.includes(productId);
+
+  useEffect(() => {
+    const userData = getUser();
+    setUser(userData);
+  }, [setUser]);
+
+  const handleBuy = () => {
+    if (isInCart) {
+      removeFromCart(productId);
+    } else {
+      addToCart(productId);
+    }
+  };
+
+  const handleLike = () => {
+    if (isLiked) {
+      removeFromFavorites(productId);
+    } else {
+      addToFavorites(productId);
+    }
+  };
+
+  function showDeleteModal() {
+    openModal(
+      "delete",
+      "حذف کتاب",
+      <p>آیا مطمئن هستید که می‌خواهید این کتاب را حذف کنید؟</p>,
+      "حذف",
+      handleDelete
+    );
+  }
+
+  function showEditModal() {
+    openModal("edit", "ویرایش کتاب", EditBookForm(), "ثبت تغییرات", handleEdit);
+  }
+
+  function handleDelete() {
+    console.log("Delete product with ID:", productId);
+    // API call to delete the product
+  }
+
+  const handleEdit = () => {
+    console.log("Edit product with ID:", productId);
+    // Navigation to edit page or open modal
+  };
+
   return (
     <>
-      {userRole === "admin" ? (
+      {user?.role === "admin" ? (
         <button
-          onClick={handleDelete}
+          onClick={showDeleteModal}
           className="text-dark-purple flex items-center justify-center gap-2 px-2 rounded-lg border border-light-purple py-4 flex-grow font-semibold"
         >
           <svg
@@ -101,9 +156,9 @@ const BookActionButtons: React.FC<BookActionButtonsProps> = ({
 
       <button
         className={`transition flex bg-dark-purple rounded-lg px-2 items-center justify-center gap-2 flex-grow font-semibold text-white`}
-        onClick={userRole === "admin" ? handleEdit : handleBuy}
+        onClick={user?.role === "admin" ? showEditModal : handleBuy}
       >
-        {userRole === "admin" ? (
+        {user?.role === "admin" ? (
           <>
             <svg
               width="18"
@@ -150,6 +205,4 @@ const BookActionButtons: React.FC<BookActionButtonsProps> = ({
       </button>
     </>
   );
-};
-
-export default BookActionButtons;
+}
