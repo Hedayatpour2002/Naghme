@@ -1,22 +1,21 @@
+import { getCategories } from "@/services/coreService";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Item {
-  categoryId: string;
+  categoryId: number;
   categoryName: string;
 }
-
-const fakeData: Item[] = [
-  { categoryId: "1", categoryName: "Category 1" },
-  { categoryId: "2", categoryName: "Category 2" },
-  { categoryId: "3", categoryName: "Category 3" },
-  // Add more items as needed
-];
 
 interface MultiSelectCategoryProps {
   selectedItems: Item[];
   setSelectedItems: React.Dispatch<React.SetStateAction<Item[]>>;
   error: string | undefined;
+}
+
+interface Categorie {
+  category_id: number;
+  category_name: string;
 }
 
 export default function MultiSelectCategory({
@@ -25,9 +24,27 @@ export default function MultiSelectCategory({
   error,
 }: MultiSelectCategoryProps) {
   const [inputValue, setInputValue] = useState<string>("");
+  const [categories, setCategories] = useState<Categorie[]>([]);
 
-  const filteredData = fakeData.filter((item) =>
-    item.categoryName.toLowerCase().includes(inputValue.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getCategories();
+        setCategories(res.message);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        } else {
+          console.log("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = categories.filter((item) =>
+    item.category_name.toLowerCase().includes(inputValue.toLowerCase())
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,9 +89,14 @@ export default function MultiSelectCategory({
                   <li
                     key={index}
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelect(item)}
+                    onClick={() =>
+                      handleSelect({
+                        categoryId: item.category_id,
+                        categoryName: item.category_name,
+                      })
+                    }
                   >
-                    {item.categoryName}
+                    {item.category_name}
                   </li>
                 ))}
               </ul>

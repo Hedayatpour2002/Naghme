@@ -181,3 +181,44 @@ export async function getPublishers() {
     }
   }
 }
+
+export async function getCategories() {
+  try {
+    const response = await apiClient.get("/core/common/Categories");
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        throw new Error("خطا در دریافت دسته بندی ها. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            const errorMessage = axiosError.response.data?.message;
+            if (errorMessage?.includes("NOT found")) {
+              throw new Error("هیچ دسته بندی ای یافت نشد!");
+            } else {
+              throw new Error(
+                "خطا در دریافت دسته بندی ها. لطفاً دوباره تلاش کنید."
+              );
+            }
+          default:
+            throw new Error(
+              "خطا در دریافت دسته بندی ها. لطفاً دوباره تلاش کنید."
+            );
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید!");
+      }
+    } else {
+      throw new Error("خطا در دریافت دسته بندی ها. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
