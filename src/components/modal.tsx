@@ -33,7 +33,7 @@ export default function ModalDialog() {
 
   return (
     <>
-      <div className="fixed bg-light-ligth-purple rounded-lg shadow-lg inset-0 w-full max-w-md h-fit self-center justify-self-center p-6 flex flex-col gap-6 z-[101]">
+      <div className="fixed bg-light-ligth-purple rounded-lg shadow-lg inset-0 w-full max-w-xl h-fit self-center justify-self-center p-6 flex flex-col gap-6 z-[101]">
         <div className="text-2xl font-semibold flex gap-4 items-center">
           {renderIcon()}
           {title}
@@ -104,23 +104,4 @@ function EditSvg() {
   );
 }
 
-function AddSvg() {
-  return (
-    <svg
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M0 12C0 5.37258 5.37258 0 12 0H24C30.6274 0 36 5.37258 36 12V24C36 30.6274 30.6274 36 24 36H12C5.37258 36 0 30.6274 0 24V12Z"
-        fill="#1A62F8"
-      />
-      <path
-        d="M29.4508 15.4441H20.5476V6.54943C20.5476 5.14151 19.4115 4 18.0034 4C16.5953 4 15.4598 5.14151 15.4598 6.55005V15.4503H6.55224C5.14413 15.4503 3.99938 16.5918 4 18.0003C3.99938 18.704 4.28372 19.349 4.74446 19.8097C5.20581 20.2716 5.84233 20.5633 6.54546 20.5633H15.4598V29.4512C15.4598 30.1555 15.7392 30.7931 16.2005 31.2532C16.6619 31.7145 17.2966 32 18.0009 32C19.4084 32 20.5476 30.8585 20.5476 29.4512V20.5627H29.4508C30.859 20.5627 32.0006 19.4113 32 18.0034C31.9994 16.5961 30.8577 15.4441 29.4508 15.4441Z"
-        fill="white"
-      />
-    </svg>
-  );
-}
+

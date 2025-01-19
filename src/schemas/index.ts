@@ -129,3 +129,80 @@ export const changePasswordSchema = z
       });
     }
   });
+
+export const addNewBookSchema = z.object({
+  title: z
+    .string()
+    .min(1, "وارد کردن عنوان الزامی است!")
+    .max(50, "عنوان حداکثر میتواند شامل 50 حرف باشد!")
+    .trim(),
+  price: z.string().min(1, "وارد کردن قیمت الزامی است!").regex(/^\d*$/, {
+    message: "قیمت را به صورت عددی وارد نمایید!",
+  }),
+
+  off: z
+    .string()
+    .min(1, "وارد کردن تخفیف الزامی است!")
+    .regex(/^\d*$/, {
+      message: "تخفیف را به صورت عددی وارد نمایید!",
+    })
+    .refine(
+      (value) => {
+        const number = parseInt(value, 10);
+        return number >= 0 && number <= 100;
+      },
+      {
+        message: "درصد تخفیف باید بین ۰ تا ۱۰۰ باشد!",
+      }
+    ),
+  format: z
+    .string()
+    .min(1, "انتخاب فرمت الزامی است!")
+    .refine((value) => value === "TEXT" || value === "AUDIO", {
+      message: "فرمت انتخاب شده معتبر نیست!",
+    }),
+
+  descriptions: z
+    .string()
+    .min(1, "وارد کردن توضیحات الزامی است!")
+    .max(500, "توضیحات حداکثر می‌تواند شامل 500 حرف باشد!")
+    .trim(),
+  publishDate: z
+    .string({ message: "وارد کردن تاریخ انتشار الزامی است!" })
+    .min(1, "وارد کردن تاریخ انتشار الزامی است!"),
+  selectedAuthors: z
+    .array(
+      z.object({
+        image: z.string(),
+        author: z.string(),
+      })
+    )
+    .nonempty("انتخاب حداقل یک نویسنده الزامی است!"),
+
+  selectedPublishers: z
+    .array(
+      z.object({
+        image: z.string(),
+        author: z.string(),
+      })
+    )
+    .nonempty("انتخاب حداقل یک ناشر الزامی است!"),
+
+  selectedCategories: z
+    .array(
+      z.object({
+        image: z.string(),
+        author: z.string(),
+      })
+    )
+    .nonempty("انتخاب حداقل یک دسته بندی الزامی است!"),
+
+  selectedGenres: z
+    .array(
+      z.object({
+        image: z.string(),
+        author: z.string(),
+      })
+    )
+    .nonempty("انتخاب حداقل یک ژانر الزامی است!"),
+});

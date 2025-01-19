@@ -8,7 +8,7 @@ export default function AdminAuthLayout({
 }) {
   return (
     <>
-      <main className="container py-8 flex flex-col md:flex-row-reverse items-center justify-center  gap-4 md:w-96 lg:w-auto xl:gap-16 min-h-screen">
+      <main className="container py-8 flex flex-col md:flex-row-reverse items-center justify-center  gap-4 md:w-96 lg:w-auto xl:gap-16 ">
         <Image
           src="/images/adminLogin.svg"
           alt="books"

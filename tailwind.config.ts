@@ -26,7 +26,6 @@ const config: Config = {
   			'dark-dark-purple': '#5C067C',
   			'darkest-purple': '#310043',
   			purple: '#C50EFF',
-  			red: '#FF6366'
   		},
   		fontFamily: {
   			shabnam: ["Shabnam", "sans-serif"],

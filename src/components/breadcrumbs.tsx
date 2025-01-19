@@ -11,6 +11,8 @@ const breadcrumbLabels: { [key: string]: string } = {
   settings: "تنظیمات",
   ebooks: "کتاب های الکترونیکی",
   audiobooks: "کتاب های صوتی",
+  admin: "ادمین",
+  "new-book": "کتاب جدید",
 };
 
 export default function Breadcrumbs() {

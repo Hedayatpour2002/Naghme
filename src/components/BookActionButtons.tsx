@@ -2,7 +2,6 @@
 import useModalStore from "@/stores/useModalStore";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import EditBookForm from "./editBookForm";
 import useUserStore from "@/stores/userStore";
 import { useStore } from "@/stores/useStore";
 import getUser from "@/utils/getUser";
@@ -62,7 +61,8 @@ export default function BookActionButtons({
   }
 
   function showEditModal() {
-    openModal("edit", "ویرایش کتاب", EditBookForm(), "ثبت تغییرات", handleEdit);
+    // openModal("edit", "ویرایش کتاب", BookForm(), "ثبت تغییرات", handleEdit);
+    handleEdit();
   }
 
   function handleDelete() {
