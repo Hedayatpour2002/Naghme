@@ -1,27 +1,28 @@
+"use client";
+
 import FormError from "@/components/auth/formError";
 import FormSuccess from "@/components/auth/formSuccess";
-import { addAuthor } from "@/services/coreService";
+import { addAuthor, getAuthors } from "@/services/coreService";
 import getCookie from "@/utils/getCookie";
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Item {
   image: string;
   author: string;
 }
-
-const fakeData: Item[] = [
-  { image: "url1.jpg", author: "Author 1" },
-  { image: "url2.jpg", author: "Author 2" },
-  { image: "url3.jpg", author: "Author 3" },
-];
-
 interface MultiSelectAuthorProps {
   selectedItems: Item[];
   setSelectedItems: React.Dispatch<React.SetStateAction<Item[]>>;
   error: string | undefined;
 }
+
+interface Auther {
+  author_id: number;
+  author_name: string;
+}
+
 export default function MultiSelectAuthor({
   selectedItems,
   setSelectedItems,
@@ -30,12 +31,30 @@ export default function MultiSelectAuthor({
   const [inputValue, setInputValue] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [newItemImage, setNewItemImage] = useState<string>("");
+  const [authers, setAuthers] = useState<Auther[]>([]);
 
   const [actionError, setActionError] = useState<string | undefined>("");
   const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
 
-  const filteredData = fakeData.filter((item) =>
-    item.author.toLowerCase().includes(inputValue.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getAuthors();
+        setAuthers(res.message);
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = authers.filter((item) =>
+    item.author_name.toLowerCase().includes(inputValue.toLowerCase())
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,11 +74,7 @@ export default function MultiSelectAuthor({
   };
 
   const handleRemove = (item: Item) => {
-    setSelectedItems(
-      selectedItems.filter(
-        (i) => i.author !== item.author || i.image !== item.image
-      )
-    );
+    setSelectedItems(selectedItems.filter((i) => i.author !== item.author));
   };
 
   const handleAddNewItem = async () => {
@@ -77,7 +92,7 @@ export default function MultiSelectAuthor({
       const res = await addAuthor(token, authorName);
       console.log("add author was successful, RESPONSE:", res);
 
-      setActionSuccess("نویسنده ی جدید با موفقیت ثبت شد");
+      setActionSuccess("نویسنده جدید با موفقیت ثبت شد!");
       setSelectedItems([...selectedItems, newItem]);
     } catch (error) {
       if (error instanceof Error) {
@@ -120,9 +135,14 @@ export default function MultiSelectAuthor({
                   <li
                     key={index}
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelect(item)}
+                    onClick={() =>
+                      handleSelect({
+                        image: "",
+                        author: item.author_name,
+                      })
+                    }
                   >
-                    {item.author}
+                    {item.author_name}
                   </li>
                 ))}
               </ul>

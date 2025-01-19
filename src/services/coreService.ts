@@ -11,7 +11,7 @@ export async function addAuthor(token: string, authorName: string) {
       case 200:
         return response.data;
       default:
-        throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+        throw new Error("خطا در افزدون نویسنده. لطفاً دوباره تلاش کنید!");
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -38,16 +38,16 @@ export async function addAuthor(token: string, authorName: string) {
             } else if (errorMessage?.includes("already exists")) {
               throw new Error("نویسنده ای با این نام وجود دارد!");
             } else {
-              throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+              throw new Error("خطا در افزدون نویسنده. لطفاً دوباره تلاش کنید!");
             }
           default:
-            throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+            throw new Error("خطا در افزدون نویسنده. لطفاً دوباره تلاش کنید!");
         }
       } else {
         throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید!");
       }
     } else {
-      throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+      throw new Error("خطا در افزدون نویسنده. لطفاً دوباره تلاش کنید!");
     }
   }
 }
@@ -63,7 +63,7 @@ export async function addPublisher(token: string, publisherName: string) {
       case 200:
         return response.data;
       default:
-        throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+        throw new Error("خطا درافزودن ناشر. لطفاً دوباره تلاش کنید.");
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -90,16 +90,94 @@ export async function addPublisher(token: string, publisherName: string) {
             } else if (errorMessage?.includes("already exists")) {
               throw new Error("ناشری با این نام وجود دارد!");
             } else {
-              throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+              throw new Error("خطا درافزودن ناشر. لطفاً دوباره تلاش کنید.");
             }
           default:
-            throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+            throw new Error("خطا درافزودن ناشر. لطفاً دوباره تلاش کنید.");
         }
       } else {
         throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید!");
       }
     } else {
-      throw new Error("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید!");
+      throw new Error("خطا درافزودن ناشر. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
+
+export async function getAuthors() {
+  try {
+    const response = await apiClient.get("/core/common/Authors");
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        throw new Error("خطا در دریافت نویسنده ها. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            const errorMessage = axiosError.response.data?.message;
+            if (errorMessage?.includes("NOT found")) {
+              throw new Error("هیچ نویسنده ای یافت نشد!");
+            } else {
+              throw new Error(
+                "خطا در دریافت نویسنده ها. لطفاً دوباره تلاش کنید."
+              );
+            }
+          default:
+            throw new Error(
+              "خطا در دریافت نویسنده ها. لطفاً دوباره تلاش کنید."
+            );
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید!");
+      }
+    } else {
+      throw new Error("خطا در دریافت نویسنده ها. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
+
+export async function getPublishers() {
+  try {
+    const response = await apiClient.get("/core/common/Publishers");
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        throw new Error("خطا در دریافت ناشرها. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            const errorMessage = axiosError.response.data?.message;
+            if (errorMessage?.includes("NOT found")) {
+              throw new Error("هیچ ناشری یافت نشد!");
+            } else {
+              throw new Error("خطا در دریافت ناشرها. لطفاً دوباره تلاش کنید.");
+            }
+          default:
+            throw new Error("خطا در دریافت ناشرها. لطفاً دوباره تلاش کنید.");
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید!");
+      }
+    } else {
+      throw new Error("خطا در دریافت ناشرها. لطفاً دوباره تلاش کنید.");
     }
   }
 }

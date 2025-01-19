@@ -1,8 +1,17 @@
+"use client";
+
+import FormError from "@/components/auth/formError";
+import FormSuccess from "@/components/auth/formSuccess";
+import { addPublisher, getPublishers } from "@/services/coreService";
+import getCookie from "@/utils/getCookie";
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const fakeData = ["مجید", "ایران"];
+interface Publisher {
+  publisher_id: number;
+  publisher_name: string;
+}
 
 interface MultiSelectPublisherProps {
   selectedItems: string[];
@@ -16,9 +25,30 @@ export default function MultiSelectPublisher({
 }: MultiSelectPublisherProps) {
   const [inputValue, setInputValue] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [publishers, setPublishers] = useState<Publisher[]>([]);
 
-  const filteredData = fakeData.filter((item) =>
-    item.toLowerCase().includes(inputValue.toLowerCase())
+  const [actionError, setActionError] = useState<string | undefined>("");
+  const [actionSuccess, setActionSuccess] = useState<string | undefined>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getPublishers();
+        setPublishers(res.message);
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = publishers.filter((item) =>
+    item.publisher_name.toLowerCase().includes(inputValue.toLowerCase())
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,14 +66,33 @@ export default function MultiSelectPublisher({
     setSelectedItems(selectedItems.filter((i) => i !== item));
   };
 
-  const handleAddNewItem = () => {
-    const newItem: string = inputValue;
-    if (!selectedItems.find((i) => i === newItem)) {
-      setSelectedItems([...selectedItems, newItem]);
+  const handleAddNewItem = async () => {
+    setActionError("");
+    setActionSuccess("");
+    const token = getCookie("token") || "";
+    const publisherName = inputValue;
+
+    try {
+      const res = await addPublisher(token, publisherName);
+      console.log("add author was successful, RESPONSE:", res);
+
+      setActionSuccess("ناشر جدید با موفقیت ثبت شد!");
+      setSelectedItems([...selectedItems, publisherName]);
+    } catch (error) {
+      if (error instanceof Error) {
+        setActionError(error.message);
+      } else {
+        setActionError("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+      }
     }
+  };
+
+  function closeModal() {
     setShowModal(false);
     setInputValue("");
-  };
+    setActionError("");
+    setActionSuccess("");
+  }
 
   return (
     <div className="w-full max-w-[320px] sm:max-w-none flex flex-col gap-2">
@@ -70,9 +119,9 @@ export default function MultiSelectPublisher({
                   <li
                     key={index}
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelect(item)}
+                    onClick={() => handleSelect(item.publisher_name)}
                   >
-                    {item}
+                    {item.publisher_name}
                   </li>
                 ))}
               </ul>
@@ -132,16 +181,21 @@ export default function MultiSelectPublisher({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-
+        <div className="min-h-10">
+          {actionError && <FormError message={actionError} />}
+          {actionSuccess && <FormSuccess message={actionSuccess} />}
+        </div>
         <div
-          className="px-4 py-2 bg-dark-purple font-bold text-center text-white rounded-lg"
+          className="w-full px-4 py-2 bg-dark-purple font-bold text-center text-white rounded-lg"
           onClick={handleAddNewItem}
         >
           اضافه کردن ناشر
         </div>
         <div
-          className="ml-2 px-4 py-2 bg-light-silver rounded-lg text-center"
-          onClick={() => setShowModal(false)}
+          className="w-full ml-2 px-4 py-2 bg-light-silver rounded-lg text-center"
+          onClick={() => {
+            closeModal();
+          }}
         >
           لغو
         </div>
@@ -150,7 +204,7 @@ export default function MultiSelectPublisher({
         <div
           className="bg-black bg-opacity-50 fixed inset-0 z-[100]"
           onClick={() => {
-            setShowModal((prev) => !prev);
+            closeModal();
           }}
         ></div>
       )}

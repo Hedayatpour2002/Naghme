@@ -54,7 +54,6 @@ export default function BooksTitle({
         {user?.role === "admin" && (
           <Link
             href="admin/new-book"
-            target="_blank"
             className="border py-2 rounded-lg bg-dark-purple text-white shadow-xl font-bold text-center"
           >
             اضافه کردن کتاب
