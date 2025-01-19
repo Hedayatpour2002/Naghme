@@ -43,9 +43,9 @@ export default function MultiSelectAuthor({
         setAuthers(res.message);
       } catch (error) {
         if (error instanceof Error) {
-          alert(error.message);
+          console.log(error.message);
         } else {
-          alert("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+          console.log("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
         }
       }
     };
