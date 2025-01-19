@@ -13,7 +13,7 @@ interface MultiSelectCategoryProps {
   error: string | undefined;
 }
 
-interface Categorie {
+interface Category {
   category_id: number;
   category_name: string;
 }
@@ -24,7 +24,7 @@ export default function MultiSelectCategory({
   error,
 }: MultiSelectCategoryProps) {
   const [inputValue, setInputValue] = useState<string>("");
-  const [categories, setCategories] = useState<Categorie[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +35,7 @@ export default function MultiSelectCategory({
         if (error instanceof Error) {
           console.log(error.message);
         } else {
-          console.log("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+          console.log("خطا در دریافت دسته بندی ها. لطفاً دوباره تلاش کنید.");
         }
       }
     };

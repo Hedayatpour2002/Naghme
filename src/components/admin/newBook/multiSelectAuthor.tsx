@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 interface Item {
   image: string;
   author: string;
+  authorId?: number; // Optional field
 }
 interface MultiSelectAuthorProps {
   selectedItems: Item[];
@@ -45,7 +46,7 @@ export default function MultiSelectAuthor({
         if (error instanceof Error) {
           console.log(error.message);
         } else {
-          console.log("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+          console.log("خطا در دریافت نویسنده ها. لطفاً دوباره تلاش کنید.");
         }
       }
     };
@@ -61,13 +62,16 @@ export default function MultiSelectAuthor({
     setInputValue(e.target.value);
   };
 
-  const handleSelect = (item: Item) => {
+  const handleSelect = (item: Auther) => {
     if (
       !selectedItems.find(
-        (i) => i.author === item.author && i.image === item.image
+        (i) => i.author === item.author_name && i.image === ""
       )
     ) {
-      setSelectedItems([...selectedItems, item]);
+      setSelectedItems([
+        ...selectedItems,
+        { image: "", author: item.author_name, authorId: item.author_id },
+      ]);
     }
     setNewItemImage("");
     setInputValue("");
@@ -84,6 +88,7 @@ export default function MultiSelectAuthor({
     const newItem: Item = {
       image: newItemImage,
       author: inputValue,
+      authorId: undefined,
     };
 
     const token = getCookie("token") || "";
@@ -91,7 +96,10 @@ export default function MultiSelectAuthor({
     try {
       const res = await addAuthor(token, authorName);
       console.log("add author was successful, RESPONSE:", res);
-
+      const idMatch = res.message.match(/id=(\d+)/);
+      if (idMatch && idMatch[1]) {
+        newItem.authorId = parseInt(idMatch[1], 10);
+      }
       setActionSuccess("نویسنده جدید با موفقیت ثبت شد!");
       setSelectedItems([...selectedItems, newItem]);
     } catch (error) {
@@ -137,8 +145,8 @@ export default function MultiSelectAuthor({
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                     onClick={() =>
                       handleSelect({
-                        image: "",
-                        author: item.author_name,
+                        author_id: item.author_id,
+                        author_name: item.author_name,
                       })
                     }
                   >

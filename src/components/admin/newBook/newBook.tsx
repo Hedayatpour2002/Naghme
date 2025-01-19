@@ -15,7 +15,15 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import MultiSelectAuthor from "./multiSelectAuthor";
 import MultiSelectPublisher from "./multiSelectPublisher";
 import MultiSelectCategory from "./multiSelectCategory";
-import MultiSelectGener from "./multiSelectGenre";
+import MultiSelectgenre from "./multiSelectGenre";
+import getCookie from "@/utils/getCookie";
+import {
+  addAuthorToBook,
+  addBook,
+  addCategoryToBook,
+  addGenreToBook,
+  addPublisherToBook,
+} from "@/services/coreService";
 
 type Errors = {
   title?: string;
@@ -33,14 +41,19 @@ type Errors = {
 interface Author {
   image: string;
   author: string;
+  authorId?: number;
+}
+interface Publisher {
+  publisher_id: number;
+  publisher_name: string;
 }
 interface Category {
-  categoryId: string;
+  categoryId: number;
   categoryName: string;
 }
 
-interface Gener {
-  genreId: string;
+interface genre {
+  genreId: number;
   genreName: string;
 }
 
@@ -52,9 +65,9 @@ export default function NewBook() {
   const [descriptions, setDescriptions] = useState<string>("");
   const [publishDate, setPublishDate] = useState<DateObject | undefined>();
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
-  const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
+  const [selectedPublishers, setSelectedPublishers] = useState<Publisher[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [selectedGenres, setSelectedGenres] = useState<Gener[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<genre[]>([]);
 
   const [errors, setErrors] = useState<Errors>({});
   const [actionError, setActionError] = useState<string | undefined>("");
@@ -109,7 +122,46 @@ export default function NewBook() {
 
     if (validateBookForm()) {
       startTransition(async () => {
-        // api call
+        const token = getCookie("token") || "";
+        try {
+          const formattedPublishDate = publishDate?.format("YYYY-MM-DD");
+
+          const res = await addBook(
+            token,
+            title,
+            +price,
+            +off,
+            format,
+            descriptions,
+            formattedPublishDate
+          );
+          const idMatch = res.message.match(/id=(\d+)/);
+          let bookId: number;
+
+          if (idMatch && idMatch[1]) {
+            bookId = parseInt(idMatch[1], 10);
+          }
+          selectedAuthors.forEach(async (author) => {
+            await addAuthorToBook(token, bookId, author.authorId);
+          });
+          selectedPublishers.forEach(async (publisher) => {
+            await addPublisherToBook(token, bookId, publisher.publisher_id);
+          });
+          selectedCategories.forEach(async (category) => {
+            await addCategoryToBook(token, bookId, category.categoryId);
+          });
+          selectedGenres.forEach(async (genre) => {
+            await addGenreToBook(token, bookId, genre.genreId);
+          });
+
+          setActionSuccess("ثبت کتاب جدید موفقیت‌آمیز بود!");
+        } catch (error) {
+          if (error instanceof Error) {
+            setActionError(error.message);
+          } else {
+            setActionError("خطا در ایجاد کتاب جدید. لطفاً دوباره تلاش کنید.");
+          }
+        }
       });
     }
   }
@@ -284,7 +336,7 @@ export default function NewBook() {
         setSelectedItems={setSelectedCategories}
         error={errors.selectedCategories}
       />
-      <MultiSelectGener
+      <MultiSelectgenre
         selectedItems={selectedGenres}
         setSelectedItems={setSelectedGenres}
         error={errors.selectedGenres}

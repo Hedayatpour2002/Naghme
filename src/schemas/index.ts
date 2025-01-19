@@ -180,14 +180,19 @@ export const addNewBookSchema = z.object({
     .nonempty("انتخاب حداقل یک نویسنده الزامی است!"),
 
   selectedPublishers: z
-    .array(z.string())
+    .array(
+      z.object({
+        publisher_id: z.number(),
+        publisher_name: z.string(),
+      })
+    )
     .nonempty("انتخاب حداقل یک ناشر الزامی است!"),
 
   selectedCategories: z
     .array(
       z.object({
-        image: z.string(),
-        author: z.string(),
+        categoryId: z.number(),
+        categoryName: z.string(),
       })
     )
     .nonempty("انتخاب حداقل یک دسته بندی الزامی است!"),
@@ -195,8 +200,8 @@ export const addNewBookSchema = z.object({
   selectedGenres: z
     .array(
       z.object({
-        image: z.string(),
-        author: z.string(),
+        genreId: z.number(),
+        genreName: z.string(),
       })
     )
     .nonempty("انتخاب حداقل یک ژانر الزامی است!"),

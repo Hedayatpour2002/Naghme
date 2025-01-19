@@ -1,33 +1,50 @@
+import { getGenres } from "@/services/coreService";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Item {
-  genreId: string;
+  genreId: number;
   genreName: string;
 }
 
-const fakeData: Item[] = [
-  { genreId: "1", genreName: "ژانر 1" },
-  { genreId: "2", genreName: "ژانر 2" },
-  { genreId: "3", genreName: "ژانر 3" },
-  // Add more items as needed
-];
-
-interface MultiSelectGenerProps {
+interface MultiSelectgenreProps {
   selectedItems: Item[];
   setSelectedItems: React.Dispatch<React.SetStateAction<Item[]>>;
   error: string | undefined;
 }
 
-export default function MultiSelectGener({
+interface genre {
+  genre_id: number;
+  genre_name: string;
+}
+
+export default function MultiSelectgenre({
   selectedItems,
   setSelectedItems,
   error,
-}: MultiSelectGenerProps) {
+}: MultiSelectgenreProps) {
   const [inputValue, setInputValue] = useState<string>("");
+  const [genres, setGenres] = useState<genre[]>([]);
 
-  const filteredData = fakeData.filter((item) =>
-    item.genreName.toLowerCase().includes(inputValue.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getGenres();
+        setGenres(res.message);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        } else {
+          console.log("خطا در دریافت ژانرها. لطفاً دوباره تلاش کنید.");
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = genres.filter((item) =>
+    item.genre_name.toLowerCase().includes(inputValue.toLowerCase())
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,9 +89,14 @@ export default function MultiSelectGener({
                   <li
                     key={index}
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelect(item)}
+                    onClick={() =>
+                      handleSelect({
+                        genreName: item.genre_name,
+                        genreId: item.genre_id,
+                      })
+                    }
                   >
-                    {item.genreName}
+                    {item.genre_name}
                   </li>
                 ))}
               </ul>

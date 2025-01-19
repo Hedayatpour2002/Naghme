@@ -14,10 +14,11 @@ interface Publisher {
 }
 
 interface MultiSelectPublisherProps {
-  selectedItems: string[];
-  setSelectedItems: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedItems: Publisher[];
+  setSelectedItems: React.Dispatch<React.SetStateAction<Publisher[]>>;
   error: string | undefined;
 }
+
 export default function MultiSelectPublisher({
   selectedItems,
   setSelectedItems,
@@ -39,7 +40,7 @@ export default function MultiSelectPublisher({
         if (error instanceof Error) {
           console.log(error.message);
         } else {
-          console.log("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+          console.log("خطا در دریافت ناشرها لطفاً دوباره تلاش کنید.");
         }
       }
     };
@@ -55,29 +56,38 @@ export default function MultiSelectPublisher({
     setInputValue(e.target.value);
   };
 
-  const handleSelect = (item: string) => {
-    if (!selectedItems.find((i) => i === item)) {
+  const handleSelect = (item: Publisher) => {
+    if (!selectedItems.some((i) => i.publisher_id === item.publisher_id)) {
       setSelectedItems([...selectedItems, item]);
     }
     setInputValue("");
   };
 
-  const handleRemove = (item: string) => {
-    setSelectedItems(selectedItems.filter((i) => i !== item));
+  const handleRemove = (item: Publisher) => {
+    setSelectedItems(
+      selectedItems.filter((i) => i.publisher_id !== item.publisher_id)
+    );
   };
 
   const handleAddNewItem = async () => {
     setActionError("");
     setActionSuccess("");
+
     const token = getCookie("token") || "";
     const publisherName = inputValue;
 
     try {
       const res = await addPublisher(token, publisherName);
-      console.log("add author was successful, RESPONSE:", res);
+      console.log("add publisher was successful, RESPONSE:", res);
+
+      // Assuming the server returns the publisher_id in the response
+      const newPublisher: Publisher = {
+        publisher_id: res.publisher_id, // Replace with actual property from response
+        publisher_name: publisherName,
+      };
 
       setActionSuccess("ناشر جدید با موفقیت ثبت شد!");
-      setSelectedItems([...selectedItems, publisherName]);
+      setSelectedItems([...selectedItems, newPublisher]);
     } catch (error) {
       if (error instanceof Error) {
         setActionError(error.message);
@@ -119,7 +129,12 @@ export default function MultiSelectPublisher({
                   <li
                     key={index}
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelect(item.publisher_name)}
+                    onClick={() =>
+                      handleSelect({
+                        publisher_id: item.publisher_id,
+                        publisher_name: item.publisher_name,
+                      })
+                    }
                   >
                     {item.publisher_name}
                   </li>
@@ -151,7 +166,7 @@ export default function MultiSelectPublisher({
       <div className="flex flex-wrap gap-2 py-3">
         {selectedItems.map((item) => (
           <div
-            key={item}
+            key={item.publisher_id}
             className="inline-flex items-center px-3 py-1 text-sm font-medium bg-light-purple rounded-full"
           >
             <svg
@@ -163,7 +178,7 @@ export default function MultiSelectPublisher({
             >
               <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
             </svg>
-            {item}
+            {item.publisher_name}
           </div>
         ))}
       </div>
