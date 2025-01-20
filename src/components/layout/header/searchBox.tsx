@@ -1,10 +1,24 @@
 "use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useState } from "react";
 import Menu from "@/components/layout/header/menu";
 
 export default function SearchBox() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim() === "") {
+      alert("Please enter a book name.");
+      return;
+    }
+    const encodedQuery = encodeURIComponent(query);
+    router.push(`/books?book_name=${encodedQuery}`);
+  };
 
   return (
     <div className="flex items-stretch justify-between lg:max-w-[600px] flex-grow">
@@ -67,9 +81,14 @@ export default function SearchBox() {
         )}
       </button>
 
-      <div className="flex flex-grow gap-1 items-center md:px-4 border border-light-silver rounded-tl-xl rounded-bl-xl  focus-within:border-dark-purple transition px-2">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-grow gap-1 items-center md:px-4 border border-light-silver rounded-tl-xl rounded-bl-xl  focus-within:border-dark-purple transition px-2"
+      >
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="py-2 px-1 w-full text-xs placeholder:text-silver sm:text-base"
           placeholder={`جست و جوی کتاب`}
         />
@@ -82,7 +101,7 @@ export default function SearchBox() {
             height={16}
           />
         </button>
-      </div>
+      </form>
 
       {menuOpen && <Menu onClose={() => setMenuOpen(false)} />}
     </div>

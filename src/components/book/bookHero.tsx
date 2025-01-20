@@ -55,8 +55,8 @@ export default function BookHero({ book }: BookHeroProps) {
       <section className="flex gap-4 flex-col self-start lg:gap-8 lg:max-w-[533px]">
         <div className="flex gap-7">
           <div className="border border-dark-red rounded-lg flex gap-4 py-3 px-5 items-center justify-center">
-            <span className="text-dark-red relative top-0.5">4.5</span>
-            <StarRating rating={4.5} />
+            <span className="text-dark-red relative top-0.5">بدون امتیاز</span>
+            <StarRating rating={0} />
           </div>
           <div className="border border-light-silver text-light-blue py-3 text-center rounded-lg px-5 min-w-40">
             <span className="relative top-0.5">{book_views} نظر</span>
