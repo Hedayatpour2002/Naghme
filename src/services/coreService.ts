@@ -586,3 +586,58 @@ export async function addGenreToBook(
     }
   }
 }
+
+export async function getBooksList(
+  filters: {
+    book_name?: string;
+    authors?: string[];
+    publishers?: string[];
+    categories?: string[];
+    genres?: string[];
+    price_min?: number;
+    price_max?: number;
+    offset?: number;
+    sort_by?: string;
+  } = {}
+) {
+  try {
+    // فیلتر کردن پارامترهای خالی از filters
+    const validParams: Record<string, any> = {};
+    for (const [key, value] of Object.entries(filters)) {
+      if (value && (Array.isArray(value) ? value.length > 0 : true)) {
+        validParams[key] = Array.isArray(value) ? value.join(",") : value;
+      }
+    }
+    const response = await apiClient.get("/core/common/books-list", {
+      params: validParams, // ارسال پارامترهای فیلتر شده
+    });
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        throw new Error("خطا در دریافت لیست کتاب‌ها. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            throw new Error("هیچ کتابی مطابق فیلترها یافت نشد.");
+          default:
+            throw new Error(
+              "خطا در دریافت لیست کتاب‌ها. لطفاً دوباره تلاش کنید."
+            );
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
+      }
+    } else {
+      throw new Error("خطا در دریافت لیست کتاب‌ها. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
