@@ -139,7 +139,7 @@ export default function Books() {
               {error && <p className="text-red-500">{error}</p>}
               {books.length > 0
                 ? books.map((book, index) => (
-                    <BookCard key={index} /> // نمایش داینامیک کتاب‌ها {...book}
+                    <BookCard key={index} book={book} />
                   ))
                 : !error && <p>هیچ کتابی یافت نشد.</p>}
             </>

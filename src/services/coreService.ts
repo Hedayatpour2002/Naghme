@@ -601,7 +601,6 @@ export async function getBooksList(
   } = {}
 ) {
   try {
-    // فیلتر کردن پارامترهای خالی از filters
     const validParams: Record<string, any> = {};
     for (const [key, value] of Object.entries(filters)) {
       if (value && (Array.isArray(value) ? value.length > 0 : true)) {
@@ -609,7 +608,7 @@ export async function getBooksList(
       }
     }
     const response = await apiClient.get("/core/common/books-list", {
-      params: validParams, // ارسال پارامترهای فیلتر شده
+      params: validParams,
     });
 
     switch (response.status) {
@@ -638,6 +637,52 @@ export async function getBooksList(
       }
     } else {
       throw new Error("خطا در دریافت لیست کتاب‌ها. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
+
+export async function getBook(id: number) {
+  try {
+    const response = await apiClient.get("/core/common/book", {
+      params: { book_id: id },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("خطا در دریافت اطلاعات کتاب. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        const { status, data } = axiosError.response;
+        const errorMessage = data?.message || "خطا در ارتباط با سرور.";
+
+        switch (status) {
+          case 400:
+            if (errorMessage.includes("Validation errors")) {
+              throw new Error("داده‌های ارسالی نامعتبر هستند.");
+            } else if (errorMessage.includes("NOT found")) {
+              throw new Error("کتابی با این شناسه پیدا نشد.");
+            } else {
+              throw new Error("خطا در درخواست شما.");
+            }
+          case 404:
+            throw new Error("کتاب یافت نشد.");
+          case 500:
+            throw new Error("خطای سرور. لطفاً دوباره تلاش کنید.");
+          default:
+            throw new Error(errorMessage);
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
+      }
+    } else {
+      throw new Error("خطا در ورود به سیستم. لطفاً دوباره تلاش کنید.");
     }
   }
 }

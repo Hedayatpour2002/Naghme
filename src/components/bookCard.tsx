@@ -4,47 +4,61 @@ import Image from "next/image";
 import BookActionButtons from "@/components/BookActionButtons";
 import Link from "next/link";
 
-export default function BookCard() {
-  const productId = "1";
+export default function BookCard({ book }) {
+  const {
+    book_id,
+    title,
+    price,
+    is_off,
+    book_likes,
+    book_views,
+    format,
+    descriptions,
+    Authors,
+    Publishers,
+    Categories,
+    Genres,
+  } = book;
+
+  const discountedPrice = is_off ? price * (1 - is_off / 100) : price;
+
   return (
     <div className="flex rounded-2xl border border-light-ligth-purple shadow-md p-2 gap-3 relative overflow-hidden">
-      <p className="absolute top-0 right-0 bg-dark-red text-white p-2 shadow-2xl rounded-bl-2xl rounded-tr-2xl text-xs font-semibold">
-        فروش ویژه
-      </p>
-      {/* @TODO */}
-      <Link href={`books/1`} className="flex">
+      {is_off > 0 && (
+        <p className="absolute top-0 right-0 bg-dark-red text-white p-2 shadow-2xl rounded-bl-2xl rounded-tr-2xl text-xs font-semibold">
+          فروش ویژه
+        </p>
+      )}
+      <Link href={`/books/${book_id}`} className="flex">
         <Image
           src={"/sample/home-bestsellers/placeholder-0.png"}
           width={133}
           height={222}
-          alt=""
+          alt={title}
           className="object-cover rounded-[20px]"
         />
       </Link>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-1 justify-between">
-            {/* @TODO */}
             <span className="text-dark-purple bg-light-purple rounded-lg px-4 py-3 font-bold text-sm flex-grow text-center">
-              کتاب الکترونیکی
+              {format === "AUDIO" ? "کتاب صوتی" : "کتاب الکترونیکی"}
             </span>
-            {/* @TODO */}
             <span className="text-dark-purple bg-light-purple rounded-lg px-4 py-3 font-bold text-sm flex-grow text-center">
-              درام
+              {Categories.length > 0 && Categories[0].category_name}
             </span>
           </div>
-          {/* @TODO */}
-          <Link href={`books/1`}>
-            <h2 className="font-semibold">صد سال تنهایی</h2>
+          <Link href={`/books/${book_id}`}>
+            <h2 className="font-semibold">{title}</h2>
           </Link>
           <div className="flex items-center justify-between gap-3">
-            {/* @TODO */}
-            <span className="text-light-blue text-xs">گابریل گارسیا مارکز</span>
+            <span className="text-light-blue text-xs">
+              {Authors.length > 0 && Authors[0].author_name}
+            </span>
             <span className="w-1 h-1 bg-light-purple rounded-full"></span>
-            {/* @TODO */}
             <div className="flex gap-2.5 items-center">
               <span className="text-midnight-blue text-xs sm:text-sm font-semibold flex gap-1 text-center leading-none">
-                4.1
+                {book_likes > 0 ? book_likes : 0}
               </span>
               <Image
                 src={"/icon/full-star.svg"}
@@ -57,18 +71,24 @@ export default function BookCard() {
         </div>
         <div className="flex items-center justify-end gap-1 ">
           <p className="flex gap-1 items-center flex-grow">
-            <span className="bg-dark-red py-0.5 px-2 text-sm font-bold text-white rounded-md flex items-center justify-center">
-              <span className="relative -bottom-0.5">90%</span>
+            {is_off > 0 && (
+              <span className="bg-dark-red py-0.5 px-2 text-sm font-bold text-white rounded-md flex items-center justify-center">
+                <span className="relative -bottom-0.5">{is_off}%</span>
+              </span>
+            )}
+            <span className="text-xs text-silver line-through">
+              {price.toLocaleString()}
             </span>
-            <span className="text-xs text-silver line-through">100,000</span>
           </p>
           <p className="flex items-center">
-            <span className="text-2xl font-semibold leading-none">10,000</span>
+            <span className="text-2xl font-semibold leading-none">
+              {discountedPrice.toLocaleString()}
+            </span>
             <span className="font-semibold text-sm">تومان</span>
           </p>
         </div>
         <div className="flex gap-4 justify-between">
-          <BookActionButtons productId={productId} />
+          <BookActionButtons productId={book_id.toString()} />
         </div>
       </div>
     </div>
