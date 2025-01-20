@@ -14,14 +14,13 @@ interface User {
 }
 
 // List of protected routes
-const PROTECTED_ROUTES = ["/dashboard", "/settings", "/my-books", "/admin"];
+const PROTECTED_ROUTES = ["/dashboard", "/settings", "/my-books"];
 // Handle restricted paths for authenticated users
 const RESTRICTED_PATHS = [
   "/login",
   "/signup",
   "/reset-password",
   "/admin/login",
-  "/admin/reset-password",
 ];
 
 // Helper function to validate JWT token
@@ -67,12 +66,12 @@ export default async function middleware(
   }
 
   // Handle admin/user-specific paths
-  if (user && path.startsWith("/admin")) {
-    if (user.role === "admin") {
+  console.log({ path, user });
+  if (path.startsWith("/admin") && path !== "/admin/login") {
+    if (user?.role === "admin") {
       return NextResponse.next();
-    }
-    if (user.role === "user") {
-      return NextResponse.redirect(new URL("/unauthorized", req.nextUrl));
+    } else {
+      return NextResponse.redirect(new URL("/", req.nextUrl));
     }
   }
 

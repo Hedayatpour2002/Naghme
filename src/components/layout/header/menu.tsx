@@ -25,26 +25,23 @@ export default function Menu({ onClose }: MenuProps) {
     ? user.role === "admin"
       ? [
           // Admin menu items
-          { title: "داشبورد", address: "/admin/dashboard" },
+          { title: "خانه", address: "/" },
           { title: "کتاب‌ها", address: "/books" },
-          { title: "کاربران", address: "/admin/users" },
-          { title: "سفارشات", address: "/admin/orders" },
+          { title: "اضافه کردن کتاب", address: "/admin/new-book" },
         ]
       : [
           // Regular user menu items
           { title: "خانه", address: "/" },
           { title: "کتاب‌ها", address: "/books" },
-          { title: "کتاب الکترونیکی", address: "/books?model=ebook" },
-          { title: "کتاب صوتی", address: "/books?model=audiobook" },
-          { title: "جدیدترین‌ها", address: "/new-releases" },
-          { title: "پرفروش‌ترین‌ها", address: "/best-sellers" },
+          { title: "جدیدترین‌ها", address: "/books?sort_by=newest" },
+          { title: "پرفروش‌ترین‌ها", address: "/books?sort_by=best_selling" },
         ]
     : [
         // Guest menu items (not logged in)
         { title: "خانه", address: "/" },
         { title: "کتاب‌ها", address: "/books" },
-        { title: "جدیدترین‌ها", address: "/new-releases" },
-        { title: "پرفروش‌ترین‌ها", address: "/best-sellers" },
+        { title: "جدیدترین‌ها", address: "/books?sort_by=newest" },
+        { title: "پرفروش‌ترین‌ها", address: "/books?sort_by=best_selling" },
         { title: "علاقه‌مندی‌ها", address: "/favorites" },
         { title: "سبد خرید", address: "/cart" },
       ];
