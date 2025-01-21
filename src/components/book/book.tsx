@@ -3,6 +3,7 @@ import BookHero from "@/components/book/bookHero";
 import BookDetails from "./bookDetails";
 import { useEffect, useState } from "react";
 import { getBook } from "@/services/coreService";
+import Comments from "./comments";
 
 interface Book {
   book_id: number;
@@ -59,6 +60,7 @@ export default function Book({ book_id }: BookProps) {
     <>
       <BookHero book={book} />
       <BookDetails book={book} />
+      <Comments book_id={book.book_id}/>
     </>
   );
 }

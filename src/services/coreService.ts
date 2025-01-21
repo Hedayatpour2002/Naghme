@@ -686,3 +686,84 @@ export async function getBook(id: number) {
     }
   }
 }
+
+export async function getBookComments(id: number) {
+  try {
+    const response = await apiClient.get("/core/common/book-comments", {
+      params: { book_id: id },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("خطا در دریافت کامنت ها. لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        const { status, data } = axiosError.response;
+        const errorMessage = data?.message || "خطا در ارتباط با سرور.";
+
+        switch (status) {
+          case 400:
+            if (errorMessage.includes("Validation errors")) {
+              throw new Error("داده‌های ارسالی نامعتبر هستند.");
+            } else if (errorMessage.includes("NOT found")) {
+              throw new Error("کامنتی برای این کتاب پیدا نشد.");
+            } else {
+              throw new Error("خطا در درخواست شما.");
+            }
+          case 500:
+            throw new Error("خطای سرور. لطفاً دوباره تلاش کنید.");
+          default:
+            throw new Error(errorMessage);
+        }
+      } else {
+        throw new Error("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
+      }
+    } else {
+      throw new Error("خطا در ورود به سیستم. لطفاً دوباره تلاش کنید.");
+    }
+  }
+}
+
+export async function postBookComment(
+  token: string,
+  book_id: number,
+  user_id: number,
+  comment_text: string
+) {
+  try {
+    console.log(token, book_id, user_id, comment_text);
+    const response = await apiClient.post("/core/users/comment-book", {
+      token,
+      book_id,
+      user_id,
+      comment_text,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("خطا در ارسال کامنت . لطفاً دوباره تلاش کنید.");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const axiosError = error as {
+        response?: { status: number; data?: { message?: string } };
+      };
+
+      if (axiosError.response) {
+        const { data } = axiosError.response;
+        const errorMessage = data?.message || "خطا در ارتباط با سرور.";
+        throw new Error(errorMessage);
+      } else {
+        throw new Error("خطا در ورود به سیستم. لطفاً دوباره تلاش کنید.");
+      }
+    }
+  }
+}
